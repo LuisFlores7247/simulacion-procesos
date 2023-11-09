@@ -12,7 +12,6 @@ private:
 public:
     Proceso();
     Proceso(int, double, int);
-    ~Proceso();
     void setId(int);
     void setTamanio(double);
     void setCuanto(int);
