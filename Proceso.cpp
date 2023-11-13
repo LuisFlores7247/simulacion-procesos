@@ -1,15 +1,45 @@
 #include "Proceso.h"
+#include <ctime>
+#include <cstdlib>
 
-Proceso::Proceso()
+Lista::Lista()
 {
-    id = 0;
-    tamanio = 0;
-    cuanto = 0;
+    inicio = fin = NULL;
 }
 
-Proceso::Proceso(int _id, double _tamanio, int _cuanto)
+Lista::Proceso::Proceso(int indice)
 {
-    this->id = _id;
-    this->tamanio = _tamanio;
-    this->cuanto = _cuanto;
+    id = indice;
+    tamanio = rand() % 100 + 1;
+    cuanto = rand() % 10 + 1;
+}
+
+void Lista::insertaFinal(int indice)
+{
+    Proceso *aux = new Proceso(indice);
+    if (inicio == NULL)
+        inicio = aux;
+    else
+        fin->liga = aux;
+
+    fin = aux;
+}
+
+void Lista::imprimir()
+{
+    cout << endl;
+    if (inicio == NULL)
+        cout << endl
+             << "Lista Vacia...";
+    else
+    {
+        Proceso *aux = inicio;
+        while (aux->liga != NULL)
+        {
+            cout << "[" << aux->id << "," << aux->tamanio << "," << aux->cuanto << "]";
+            aux = aux->liga;
+            cout << endl;
+        }
+    }
+    cout << endl;
 }

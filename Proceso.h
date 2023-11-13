@@ -2,21 +2,23 @@
 
 using namespace std;
 
-class Proceso
+class Lista
 {
-private:
-    int id;
-    double tamanio;
-    int cuanto;
-
 public:
-    Proceso();
-    Proceso(int, double, int);
-    void setId(int);
-    void setTamanio(double);
-    void setCuanto(int);
-    int getId();
-    double getTamanio();
-    int getCuanto();
-    void mostrar();
+    class Proceso
+    {
+    public:
+        int id;
+        double tamanio;
+        int cuanto;
+        Proceso *liga;
+        Proceso(int = 0);
+    };
+    Lista();
+    void insertaFinal(int);
+    void imprimir();
+
+private:
+    Proceso *inicio;
+    Proceso *fin;
 };
