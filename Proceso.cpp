@@ -33,7 +33,6 @@ int Lista::nuevoProceso(int _id, int _tamanio, int _cuanto)
 }
 void Lista::restarMemoria(int _tamanio)
 {
-    cout << inicio->tamanio << " - " << _tamanio << endl;
     inicio->tamanio -= _tamanio;
 }
 
