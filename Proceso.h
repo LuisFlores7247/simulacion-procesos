@@ -9,13 +9,14 @@ public:
     {
     public:
         int id;
-        double tamanio;
+        int tamanio;
         int cuanto;
         Proceso *liga;
-        Proceso(int = 0);
+        Proceso(int = 0, int = 0, int = 0);
     };
     Lista();
-    void insertaFinal(int);
+    int nuevoProceso(int, int, int);
+    void restarMemoria(int);
     void imprimir();
 
 private:

@@ -2,44 +2,58 @@
 #include <ctime>
 #include <cstdlib>
 
+// Listas
 Lista::Lista()
 {
     inicio = fin = NULL;
 }
 
-Lista::Proceso::Proceso(int indice)
+Lista::Proceso::Proceso(int _id, int _tamanio, int _cuanto)
 {
-    id = indice;
-    tamanio = rand() % 100 + 1;
-    cuanto = rand() % 10 + 1;
+    id = _id;
+    tamanio = _tamanio;
+    cuanto = _cuanto;
 }
 
-void Lista::insertaFinal(int indice)
+int Lista::nuevoProceso(int _id, int _tamanio, int _cuanto)
 {
-    Proceso *aux = new Proceso(indice);
+    Proceso *aux = new Proceso(_id, _tamanio, _cuanto);
     if (inicio == NULL)
         inicio = aux;
     else
         fin->liga = aux;
 
     fin = aux;
+    if (inicio->tamanio != _tamanio)
+    {
+        restarMemoria(_tamanio);
+    }
+
+    return aux->tamanio;
+}
+void Lista::restarMemoria(int _tamanio)
+{
+    cout << inicio->tamanio << " - " << _tamanio << endl;
+    inicio->tamanio -= _tamanio;
 }
 
 void Lista::imprimir()
 {
     cout << endl;
-    if (inicio == NULL)
-        cout << endl
-             << "Lista Vacia...";
+    if (inicio == nullptr)
+    {
+        cout << "Lista Vacia..." << endl;
+    }
     else
     {
         Proceso *aux = inicio;
-        while (aux->liga != NULL)
+        while (aux != nullptr)
         {
             cout << "[" << aux->id << "," << aux->tamanio << "," << aux->cuanto << "]";
             aux = aux->liga;
-            cout << endl;
         }
     }
     cout << endl;
 }
+
+// Procesos
