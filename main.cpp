@@ -8,7 +8,7 @@ using namespace std;
 int main(int argc, char const *argv[])
 {
     srand(time(NULL));
-    int TAM_1Mb = 1024, TAM_4Mb = 4096, TAM_8Mb = 8192;
+    int const TAM_1Mb = 1024, TAM_4Mb = 4096, TAM_8Mb = 8192;
     int tamanio = 0, cuanto = 0, opc;
     Lista *l = new Lista();
     cout << "Ingrese el tamanio de la memoria: " << endl;
@@ -23,8 +23,8 @@ int main(int argc, char const *argv[])
 
     for (int i = 1; i <= 5; i++)
     {
-        tamanio = rand() % 10 + 1;
-        cuanto = rand() % 10 + 1;
+        tamanio = 1 + rand() % 10 + 1;
+        cuanto = 1 + rand() % 10 + 1;
         l->nuevoProceso(i, tamanio, cuanto);
     }
     l->imprimir();
