@@ -1,73 +1,70 @@
 #include "Proceso.h"
-#include <iostream>
-#include <ctime>
-#include <cstdlib>
-
-// Listas
-Lista::Lista()
-{
-    inicio = fin = nullptr; // Usar nullptr en lugar de NULL
-}
 
 // Constructor de la clase Proceso
-Lista::Proceso::Proceso(int _id, int _tamanio, int _cuanto)
+Proceso::Proceso(int _id, int _tamanio, int _cuanto)
 {
     id = _id;
     tamanio = _tamanio;
     cuanto = _cuanto;
-    mem_asignada = 0; // Inicializar mem_asignada
+    mem_asignada = 0;
+    liga = NULL;
 }
 
-int Lista::nuevoProceso(int _id, int _tamanio, int _cuanto)
+// Setters
+
+void Proceso::setId(int _id)
 {
-    Proceso *aux = new Proceso(_id, _tamanio, _cuanto);
-    if (inicio == nullptr)
-    {
-        inicio = aux;
-    }
-    else
-    {
-        fin->liga = aux;
-    }
-
-    fin = aux;
-    if (inicio->tamanio != _tamanio)
-    {
-        aux->mem_asignada = asignarMemoria(_tamanio);
-    }
-
-    return aux->tamanio;
+    id = _id;
 }
 
-int Lista::asignarMemoria(int _tamanio)
+void Proceso::setTamanio(int _tamanio)
 {
-    int tam_actual = inicio->tamanio, tam_asignar;
-    while (inicio->tamanio > (_tamanio * 2))
-    {
-        inicio->tamanio /= 2;
-    }
-    tam_asignar = inicio->tamanio;
-    inicio->tamanio = tam_actual - tam_asignar;
-    return tam_asignar;
+    tamanio = _tamanio;
 }
 
-void Lista::imprimir()
+void Proceso::setCuanto(int _cuanto)
 {
-    cout << endl;
-    if (inicio == nullptr)
+    cuanto = _cuanto;
+}
+
+void Proceso::setMem_asignada(int _mem_asignada)
+{
+    mem_asignada = _mem_asignada;
+}
+
+// Getters
+
+int Proceso::getId()
+{
+    return id;
+}
+
+int Proceso::getTamanio()
+{
+    return tamanio;
+}
+
+int Proceso::getCuanto()
+{
+    return cuanto;
+}
+
+int Proceso::getMem_asignada()
+{
+    return mem_asignada;
+}
+
+// Sobrecarga de operadores
+Proceso &Proceso::operator=(const Proceso &_proceso)
+{
+    if (this != &_proceso)
     {
-        cout << "Lista Vacia..." << endl;
+        this->id = _proceso.id;
+        this->tamanio = _proceso.tamanio;
+        this->cuanto = _proceso.cuanto;
+        this->mem_asignada = _proceso.mem_asignada;
     }
-    else
-    {
-        Proceso *aux = inicio;
-        while (aux != NULL)
-        {
-            cout << "[" << aux->id << "," << aux->tamanio << "," << aux->cuanto << "," << aux->mem_asignada << "]";
-            aux = aux->liga;
-        }
-    }
-    cout << endl;
+    return *this;
 }
 
 // Resto del código para los procesos
