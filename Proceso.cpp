@@ -63,6 +63,7 @@ Proceso &Proceso::operator=(const Proceso &_proceso)
         this->tamanio = _proceso.tamanio;
         this->cuanto = _proceso.cuanto;
         this->mem_asignada = _proceso.mem_asignada;
+        this->liga = _proceso.liga;
     }
     return *this;
 }

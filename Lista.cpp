@@ -10,21 +10,15 @@ Lista::Lista()
 int Lista::nuevoProceso(int _id, int _tamanio, int _cuanto)
 {
     Proceso *aux = new Proceso(_id, _tamanio, _cuanto); // Crea un nuevo nodo
-    if (_id != 0 && _cuanto != 0)
+    if (inicio == NULL)
     {
-        fin = aux; // El nuevo nodo es el fin de la lista
+        inicio = fin = aux; // Si la lista está vacía, el nuevo nodo es el inicio y el fin
     }
     else
     {
-        this->buddySystem(aux);
-        if (inicio == NULL)
-        {
-            inicio = aux; // Si la lista está vacía, el nuevo nodo es el inicio y el fin
-        }
-        else
-        {
-            fin->liga = aux; // Si no, el nuevo nodo se liga al final de la lista
-        }
+        buddySystem(aux); // Si no, se aplica el algoritmo de Buddy System
+        fin->liga = aux;  // Si no, el nuevo nodo se liga al final de la lista
+        fin = aux;        // El nuevo nodo es el fin de la lista
     }
 
     return aux->tamanio;

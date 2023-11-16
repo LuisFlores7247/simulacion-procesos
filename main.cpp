@@ -25,16 +25,7 @@ int main(int argc, char const *argv[])
 
     // for (int i = 1; i < 5; i++)
     // {
-    Proceso *p1 = new Proceso(1, 1, 1);
-    Proceso *p2;
-    cout << "Proceso " << p1->id << endl;
-    cout << "Tamanio " << p1->tamanio << endl;
-    cout << "Cuanto " << p1->cuanto << endl;
-    cout << "Proceso " << p2->id << endl;
-    cout << "Tamanio " << p2->tamanio << endl;
-    cout << "Cuanto " << p2->cuanto << endl;
 
-    p2 = p1;
     l->imprimir();
     tamanio = 1 + rand() % 10 + 1;
     cuanto = 1 + rand() % 10 + 1;
