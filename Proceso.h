@@ -1,25 +1,40 @@
+#ifndef PROCESO_H
+#define PROCESO_H
+
 #include <iostream>
 
-using namespace std;
+enum STATUS
+{
+    HUECO = 0,
+    EJECUCION,
+};
 
-class Lista
+class Proceso
 {
 public:
-    class Proceso
-    {
-    public:
-        int id;
-        int tamanio;
-        int cuanto;
-        Proceso *liga;
-        Proceso(int = 0, int = 0, int = 0);
-    };
-    Lista();
-    int nuevoProceso(int, int, int);
-    void restarMemoria(int);
-    void imprimir();
+    int id;
+    int tamanio;
+    int cuanto;
+    int mem_asignada;
+    STATUS status;
+    Proceso *izq;
+    Proceso *der;
+    Proceso(int = 0, int = 0, int = 0);
 
-private:
-    Proceso *inicio;
-    Proceso *fin;
+    // setters
+    void setId(int);
+    void setTamanio(int);
+    void setCuanto(int);
+    void setMem_asignada(int);
+
+    // getters
+    int getId();
+    int getTamanio();
+    int getCuanto();
+    int getMem_asignada();
+
+    // Sobrecarga de operadores
+    Proceso &operator=(const Proceso &);
 };
+
+#endif
