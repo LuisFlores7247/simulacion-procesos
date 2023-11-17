@@ -11,23 +11,18 @@ int main(int argc, char const *argv[])
     int tamanio = 0, cuanto = 0, opc;
     Lista *l = new Lista();
 
-    // cout << "Ingrese el tamanio de la memoria: " << endl;
-    // cout << "1. 1Mb\n2. 4Mb\n3. 8Mb\n";
-    // cin >> opc;
+    cout << "Ingrese el tamanio de la memoria: " << endl;
+    cout << "1. 1Mb\n2. 4Mb\n3. 8Mb\n";
+    cin >> opc;
 
-    l->nuevoProceso(0, TAM_1Mb, 0);
-    // if (opc == 1)
-    //     l->nuevoProceso(0, TAM_1Mb, 0);
-    // else if (opc == 2)
-    //     l->nuevoProceso(0, TAM_4Mb, 0);
-    // else if (opc == 3)
-    //     l->nuevoProceso(0, TAM_8Mb, 0);
-
-    // for (int i = 1; i < 5; i++)
-    // {
+    if (opc == 1)
+        l->nuevoProceso(0, TAM_1Mb, 0);
+    else if (opc == 2)
+        l->nuevoProceso(0, TAM_4Mb, 0);
+    else if (opc == 3)
+        l->nuevoProceso(0, TAM_8Mb, 0);
 
     l->imprimir();
-    // l->nuevoProceso(1, 1, 1);
     Proceso *aux = new Proceso(1, 20, 1);
     l->particionar(aux);
     l->imprimir();
@@ -35,7 +30,6 @@ int main(int argc, char const *argv[])
     delete l;
     return 0;
 }
-
 // Estructura aproximada del main como tal
 /*
 int main(int argc, char const *argv[])
