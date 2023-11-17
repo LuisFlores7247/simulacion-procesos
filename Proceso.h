@@ -17,7 +17,8 @@ public:
     int cuanto;
     int mem_asignada;
     STATUS status;
-    Proceso *liga;
+    Proceso *izq;
+    Proceso *der;
     Proceso(int = 0, int = 0, int = 0);
 
     // setters

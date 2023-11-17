@@ -23,10 +23,10 @@ int main(int argc, char const *argv[])
         l->nuevoProceso(0, TAM_8Mb, 0);
 
     l->imprimir();
-    Proceso *aux = new Proceso(1, 20, 1);
-    l->particionar(aux);
+    Proceso *p = new Proceso(1, 64, 0);
+    l->particionar(p);
     l->imprimir();
-    cout << endl;
+
     delete l;
     return 0;
 }

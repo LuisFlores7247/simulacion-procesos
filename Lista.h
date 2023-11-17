@@ -30,9 +30,11 @@ public:
 
     // Metodos de la clase Lista
 
+    void insertaInicio(int, int, int);
+    void insertaFinal(int, int, int);
     int nuevoProceso(int, int, int);
     void particionar(Proceso *);
-    bool hayEspacio(Proceso *, Proceso *);
+    Proceso hayEspacio(Proceso *);
 
     void imprimir();
 

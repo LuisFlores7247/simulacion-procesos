@@ -2,7 +2,10 @@
 
 // Constructor de la clase Proceso
 Proceso::Proceso(int _id, int _tamanio, int _cuanto)
-    : id(_id), tamanio(_tamanio), cuanto(_cuanto), mem_asignada(0), status(HUECO), liga(NULL) {}
+    : id(_id), tamanio(_tamanio), cuanto(_cuanto), mem_asignada(0), izq(NULL), der(NULL)
+{
+    (_id == 0 && _cuanto == 0) ? status = HUECO : status = EJECUCION;
+}
 
 // Setters
 
@@ -49,6 +52,7 @@ int Proceso::getMem_asignada()
 }
 
 // Sobrecarga de operadores
+
 Proceso &Proceso::operator=(const Proceso &_proceso)
 {
     if (this != &_proceso)
@@ -57,7 +61,9 @@ Proceso &Proceso::operator=(const Proceso &_proceso)
         this->tamanio = _proceso.tamanio;
         this->cuanto = _proceso.cuanto;
         this->mem_asignada = _proceso.mem_asignada;
-        this->liga = _proceso.liga;
+        this->status = _proceso.status;
+        this->izq = _proceso.izq;
+        this->der = _proceso.der;
     }
     return *this;
 }
