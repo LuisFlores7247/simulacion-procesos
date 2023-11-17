@@ -27,9 +27,11 @@ int main(int argc, char const *argv[])
     // {
 
     l->imprimir();
-    l->nuevoProceso(1, 1, 1);
+    // l->nuevoProceso(1, 1, 1);
+    Proceso *aux = new Proceso(1, 20, 1);
+    l->particionar(aux);
     l->imprimir();
-    //
+    cout << endl;
     delete l;
     return 0;
 }

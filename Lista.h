@@ -17,8 +17,23 @@ class Lista
 {
 public:
     Lista();
+
+    // Setters
+
+    void setInicio(Proceso *);
+    void setFin(Proceso *);
+
+    // Getters
+
+    Proceso *getInicio();
+    Proceso *getFin();
+
+    // Metodos de la clase Lista
+
     int nuevoProceso(int, int, int);
     void particionar(Proceso *);
+    bool hayEspacio(Proceso *, Proceso *);
+
     void imprimir();
 
 private:

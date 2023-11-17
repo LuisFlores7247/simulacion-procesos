@@ -6,6 +6,30 @@ Lista::Lista()
     inicio = fin = NULL; // Inicializa los apuntadores
 }
 
+// Setters
+
+void Lista::setInicio(Proceso *_inicio)
+{
+    inicio = _inicio;
+}
+
+void Lista::setFin(Proceso *_fin)
+{
+    fin = _fin;
+}
+
+// Getters
+
+Proceso *Lista::getInicio()
+{
+    return inicio;
+}
+
+Proceso *Lista::getFin()
+{
+    return fin;
+}
+
 // Metodos de la clase Lista
 int Lista::nuevoProceso(int _id, int _tamanio, int _cuanto)
 {
@@ -16,7 +40,6 @@ int Lista::nuevoProceso(int _id, int _tamanio, int _cuanto)
     }
     else
     {
-        // buddySystem(aux); // Si no, se aplica el algoritmo de Buddy System
         fin->liga = aux; // Si no, el nuevo nodo se liga al final de la lista
         fin = aux;       // El nuevo nodo es el fin de la lista
     }
@@ -26,14 +49,36 @@ int Lista::nuevoProceso(int _id, int _tamanio, int _cuanto)
 
 void Lista::particionar(Proceso *_proceso)
 {
-    Proceso *aux = inicio, *p;
+    Proceso *aux = inicio, *pos;
+
     while (aux != NULL)
     {
-        if (aux->status == HUECO && p->tamanio < aux->tamanio && p->tamanio >= _proceso->tamanio)
+        if (aux->status == HUECO && aux->tamanio >= (_proceso->tamanio * 2))
         {
-            p = aux;
+            this->nuevoProceso(0, aux->tamanio / 2, 0);
+            aux->tamanio /= 2;
         }
+        aux = aux->liga;
     }
+}
+
+bool Lista::hayEspacio(Proceso *_proceso, Proceso *_pos)
+{
+    Proceso *aux = inicio;
+    while (aux != NULL)
+    {
+        if (aux->status == HUECO && (aux->liga->tamanio <= _proceso->tamanio && aux->liga->status == HUECO))
+        {
+            _pos = aux;
+            return true;
+        }
+        if ((aux->status == HUECO && aux->tamanio >= _proceso->tamanio) && (aux->tamanio < _pos->tamanio))
+        {
+            _pos = aux;
+        }
+        aux = aux->liga;
+    }
+    return false;
 }
 
 void Lista::imprimir()
