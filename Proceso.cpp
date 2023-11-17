@@ -2,7 +2,7 @@
 
 // Constructor de la clase Proceso
 Proceso::Proceso(int _id, int _tamanio, int _cuanto)
-    : id(_id), tamanio(_tamanio), cuanto(_cuanto), mem_asignada(0), izq(NULL), der(NULL)
+    : id(_id), tamanio(_tamanio), cuanto(_cuanto), mem_asignada(0), izq(NULL), der(NULL), liga(NULL)
 {
     (_id == 0 && _cuanto == 0) ? status = HUECO : status = EJECUCION;
 }

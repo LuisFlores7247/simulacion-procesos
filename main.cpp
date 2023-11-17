@@ -23,7 +23,7 @@ int main(int argc, char const *argv[])
         l->nuevoProceso(0, TAM_8Mb, 0);
 
     l->imprimir();
-    Proceso *p = new Proceso(1, 64, 0);
+    Proceso *p = new Proceso(1, 15, 0);
     l->particionar(p);
     l->imprimir();
 

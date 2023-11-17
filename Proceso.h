@@ -19,6 +19,7 @@ public:
     STATUS status;
     Proceso *izq;
     Proceso *der;
+    Proceso *liga;
     Proceso(int = 0, int = 0, int = 0);
 
     // setters
