@@ -27,9 +27,7 @@ int main(int argc, char const *argv[])
     // {
 
     l->imprimir();
-    tamanio = 1 + rand() % 10 + 1;
-    cuanto = 1 + rand() % 10 + 1;
-    l->nuevoProceso(1, tamanio, cuanto);
+    l->nuevoProceso(1, 1, 1);
     l->imprimir();
     //
     delete l;

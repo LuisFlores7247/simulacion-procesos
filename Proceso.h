@@ -3,6 +3,12 @@
 
 #include <iostream>
 
+enum STATUS
+{
+    HUECO = 0,
+    EJECUCION,
+};
+
 class Proceso
 {
 public:
@@ -10,6 +16,7 @@ public:
     int tamanio;
     int cuanto;
     int mem_asignada;
+    STATUS status;
     Proceso *liga;
     Proceso(int = 0, int = 0, int = 0);
 

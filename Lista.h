@@ -18,7 +18,7 @@ class Lista
 public:
     Lista();
     int nuevoProceso(int, int, int);
-    void buddySystem(Proceso *);
+    void particionar(Proceso *);
     void imprimir();
 
 private:

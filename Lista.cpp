@@ -16,26 +16,23 @@ int Lista::nuevoProceso(int _id, int _tamanio, int _cuanto)
     }
     else
     {
-        buddySystem(aux); // Si no, se aplica el algoritmo de Buddy System
-        fin->liga = aux;  // Si no, el nuevo nodo se liga al final de la lista
-        fin = aux;        // El nuevo nodo es el fin de la lista
+        // buddySystem(aux); // Si no, se aplica el algoritmo de Buddy System
+        fin->liga = aux; // Si no, el nuevo nodo se liga al final de la lista
+        fin = aux;       // El nuevo nodo es el fin de la lista
     }
 
     return aux->tamanio;
 }
 
-void Lista::buddySystem(Proceso *_proceso)
+void Lista::particionar(Proceso *_proceso)
 {
-    Proceso *aux = inicio;
-
-    while (aux != NULL && aux->tamanio >= 64)
+    Proceso *aux = inicio, *p;
+    while (aux != NULL)
     {
-        if (aux->tamanio >= (_proceso->tamanio * 2))
+        if (aux->status == HUECO && p->tamanio < aux->tamanio && p->tamanio >= _proceso->tamanio)
         {
-            this->nuevoProceso(0, aux->tamanio / 2, 0);
-            aux->tamanio /= 2;
+            p = aux;
         }
-        aux = aux->liga;
     }
 }
 
