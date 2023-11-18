@@ -90,8 +90,53 @@ void Lista::particionar(Proceso *_proceso)
             aux->tamanio /= 2;
         }
         aux = aux->izq;
-    }
+    }    
 }
+
+void Lista::asignMemoria(Proceso *_proceso)
+{
+    Proceso *aux = inicio;
+    //Recorremos la lista en busca de espacio
+    while (aux != NULL)
+    {
+        if (aux->status == HUECO)
+        {
+            if (aux->tamanio >= (_proceso->tamanio * 2) && aux->tamanio > 32)    // muy grande
+            {
+                Proceso *p = new Proceso(0,aux->tamanio/2,0), *q = aux->izq;
+                aux->tamanio /= 2;               
+                p->izq = aux->izq;
+                p->der = aux;
+                if (q != NULL)
+                    q->der = p;
+                else
+                    inicio = p;
+                aux->izq = p;
+                aux = p;
+                
+                
+                //Particiona
+            }
+            else
+            {
+                if (aux->tamanio >= _proceso->tamanio)   // Corrobora que el espacio no es muy pequenio
+                {
+                    _proceso->mem_asignada = aux->tamanio;
+                    *aux = *_proceso;
+                    aux->status = ENMEMORIA;
+                    
+                    //asigna
+                    return;
+                }
+            } 
+            
+        }
+        else
+            aux = aux->der;
+    }
+    
+}
+
 
 Proceso Lista::hayEspacio(Proceso *_proceso)
 {

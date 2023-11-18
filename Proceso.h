@@ -6,7 +6,9 @@
 enum STATUS
 {
     HUECO = 0,
+    ENMEMORIA,
     EJECUCION,
+    ENESPERA,
 };
 
 class Proceso

@@ -1,10 +1,11 @@
 #include "Proceso.h"
-
+#include <iostream>
+using namespace std;
 // Constructor de la clase Proceso
 Proceso::Proceso(int _id, int _tamanio, int _cuanto)
     : id(_id), tamanio(_tamanio), cuanto(_cuanto), mem_asignada(0), izq(NULL), der(NULL), liga(NULL)
 {
-    (_id == 0 && _cuanto == 0) ? status = HUECO : status = EJECUCION;
+    (_id == 0 && _cuanto == 0) ? status = HUECO : status = ENESPERA;
 }
 
 // Setters
@@ -62,8 +63,8 @@ Proceso &Proceso::operator=(const Proceso &_proceso)
         this->cuanto = _proceso.cuanto;
         this->mem_asignada = _proceso.mem_asignada;
         this->status = _proceso.status;
-        this->izq = _proceso.izq;
-        this->der = _proceso.der;
+        // this->izq = _proceso.izq;
+        // this->der = _proceso.der;
     }
     return *this;
 }
