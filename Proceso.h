@@ -1,7 +1,6 @@
 #ifndef PROCESO_H
 #define PROCESO_H
 
-#include <iostream>
 
 enum STATUS
 {
@@ -35,6 +34,13 @@ public:
 
     // Sobrecarga de operadores
     Proceso &operator=(const Proceso &);
+
+    //Llenar proceso aleatoriamente
+    Proceso *llenarProceso(int, int, int);
+
+    //Imprimir datos de un proceso
+    friend void imprimirProceso(Proceso *p);
+
 };
 
 #endif
