@@ -5,7 +5,9 @@
 enum STATUS
 {
     HUECO = 0,
+    ENMEMORIA,
     EJECUCION,
+    ENESPERA,
 };
 
 class Proceso
@@ -18,6 +20,7 @@ public:
     STATUS status;
     Proceso *izq;
     Proceso *der;
+    Proceso *liga;
     Proceso(int = 0, int = 0, int = 0);
 
     // setters

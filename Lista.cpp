@@ -5,6 +5,7 @@
 Lista::Lista()
 {
     inicio = fin = NULL; // Inicializa los apuntadores
+    inicioRR = finRR = NULL;
 }
 
 // Setters
@@ -19,6 +20,15 @@ void Lista::setFin(Proceso *_fin)
     fin = _fin;
 }
 
+void Lista::setInicioRR(Proceso *_inicioRR)
+{
+    inicioRR = _inicioRR;
+}
+void Lista::setFinRR(Proceso *_finRR)
+{
+    finRR = _finRR;
+}
+
 // Getters
 
 Proceso *Lista::getInicio()
@@ -29,6 +39,15 @@ Proceso *Lista::getInicio()
 Proceso *Lista::getFin()
 {
     return fin;
+}
+
+Proceso *Lista::getInicioRR()
+{
+    return inicioRR;
+}
+Proceso *Lista::getFinRR()
+{
+    return finRR;
 }
 
 // Metodos de la clase Lista
@@ -47,7 +66,15 @@ int Lista::nuevoProceso(int _id, int _tamanio, int _cuanto)
     }
 
     inicio = aux;
-
+    //Parte de Round Robin
+    if (aux->id != 0)   //Si es cero quiere decir que se creo un hueco y no es relevante para el Round Robin
+    {
+        if (inicioRR == NULL)   //Si es el primer proceso a entrar, fija el inicio de la lista
+            inicioRR = aux;
+        finRR->liga = aux;
+        finRR = aux;        
+    }
+    
     return aux->tamanio;
 }
 
@@ -63,8 +90,53 @@ void Lista::particionar(Proceso *_proceso)
             aux->tamanio /= 2;
         }
         aux = aux->izq;
-    }
+    }    
 }
+
+void Lista::asignMemoria(Proceso *_proceso)
+{
+    Proceso *aux = inicio;
+    //Recorremos la lista en busca de espacio
+    while (aux != NULL)
+    {
+        if (aux->status == HUECO)
+        {
+            if (aux->tamanio >= (_proceso->tamanio * 2) && aux->tamanio > 32)    // muy grande
+            {
+                Proceso *p = new Proceso(0,aux->tamanio/2,0), *q = aux->izq;
+                aux->tamanio /= 2;               
+                p->izq = aux->izq;
+                p->der = aux;
+                if (q != NULL)
+                    q->der = p;
+                else
+                    inicio = p;
+                aux->izq = p;
+                aux = p;
+                
+                
+                //Particiona
+            }
+            else
+            {
+                if (aux->tamanio >= _proceso->tamanio)   // Corrobora que el espacio no es muy pequenio
+                {
+                    _proceso->mem_asignada = aux->tamanio;
+                    *aux = *_proceso;
+                    aux->status = ENMEMORIA;
+                    
+                    //asigna
+                    return;
+                }
+            } 
+            
+        }
+        else
+            aux = aux->der;
+    }
+    
+}
+
 
 Proceso Lista::hayEspacio(Proceso *_proceso)
 {

@@ -23,14 +23,23 @@ int main(int argc, char const *argv[])
         l->nuevoProceso(0, TAM_8Mb, 0);
 
     l->imprimir();
-    Proceso *p = new Proceso(1, 64, 0);
-    l->particionar(p);
+    cout << endl << "Proceso 1: ";
+    Proceso *p = new Proceso(1, 64, 10);
+    l->asignMemoria(p);
     l->imprimir();
-
+    cout << endl << "Proceso 2: ";
+    Proceso *q = new Proceso(2, 25, 5);
+    l->asignMemoria(q);
+    l->imprimir();
+    cout << endl << "Proceso 3: ";
+    Proceso *m = new Proceso(3,32,15);
+    l->asignMemoria(m);
+    l->imprimir();
     delete l;
     return 0;
 }
-// Estructura aproximada del main como tal
+
+//Estructura aproximada del main como tal
 /*
 int main(int argc, char const *argv[])
 {
@@ -44,12 +53,15 @@ int main(int argc, char const *argv[])
     //Si se crea un nuevo proceso, verificar si puede entrar a memoria principal, en caso de que si, hacer las particiones de Buddy system
     //Meter el proceso en memoria principal
     //El planificador selecciona el proceso a ejecutar
-    //Se le da su tiempo a ejecucion, se restan los cuantos de procesamiento que se le dan
+    //Se le da su tiempo a ejecucion, se restan los cuantos de procesamiento que se le dan 
     //Si en este turno de ejecucion, se le acaba el tiempo de procesamiento al proceso, se baja de memoria, quedando un hueco
     //Si no acabo de ejecutarse, Round Robin lo manda hasta el ultimo lugar de la cola
     //Si se libero la memoria, el buddy sistem evalua si hay huecos adyacentes y los une
     //Se actualiza el modulo de estadisticas
     //Dependiendo de la velocidad de la simulacion, se imprimen los valores que se deben de imprimir
-    //La simulacion evalua si se presiono esq o se cambio la velocidad de impresion de datos, en ese caso, se hacen las acciones correspondientes
+    //La simulacion evalua si se presiono esq o se cambio la velocidad de impresion de datos, en ese caso, se hacen las acciones correspondientes   
     return 0;
-}*/
+}
+
+
+*/

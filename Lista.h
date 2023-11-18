@@ -22,11 +22,15 @@ public:
 
     void setInicio(Proceso *);
     void setFin(Proceso *);
+    void setInicioRR(Proceso *);
+    void setFinRR(Proceso *);
 
     // Getters
 
     Proceso *getInicio();
     Proceso *getFin();
+    Proceso *getInicioRR();
+    Proceso*getFinRR();
 
     // Metodos de la clase Lista
 
@@ -34,6 +38,7 @@ public:
     void insertaFinal(int, int, int);
     int nuevoProceso(int, int, int);
     void particionar(Proceso *);
+    void asignMemoria(Proceso *);
     Proceso hayEspacio(Proceso *);
 
     void imprimir();
@@ -41,6 +46,8 @@ public:
 private:
     Proceso *inicio;
     Proceso *fin;
+    Proceso *inicioRR;
+    Proceso *finRR;
 };
 
 #endif
