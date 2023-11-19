@@ -51,69 +51,81 @@ Proceso *Lista::getFinRR()
 }
 
 // Metodos de la clase Lista
-int Lista::nuevoProceso(int _id, int _tamanio, int _cuanto)
+void Lista::nuevoProceso(Proceso *aux)
 {
-    Proceso *aux = new Proceso(_id, _tamanio, _cuanto); // Crea un nuevo nodo
+    // Crea nodo con el valor de la memoria RAM seleccionado para partir de este
+
     if (inicio == NULL)
     {
-        fin = aux;
-    }
-    else
-    {
-        aux->der = inicio;
-        aux->izq = NULL;
-        inicio->izq = aux;
+        aux->status=HUECO;
+        inicio=fin=aux;
+    
     }
 
-    inicio = aux;
     //Parte de Round Robin
     if (aux->id != 0)   //Si es cero quiere decir que se creo un hueco y no es relevante para el Round Robin
     {
-        if (inicioRR == NULL)   //Si es el primer proceso a entrar, fija el inicio de la lista
-            inicioRR = aux;
-        finRR->liga = aux;
-        finRR = aux;        
+        if (inicioRR == NULL){
+        //Si es el primer proceso a entrar, fija el inicio de la lista
+            inicioRR= finRR = aux;
+        }
+       else{  
+           
+            /*aux->liga=inicioRR
+            inicioRR=aux*/
+            finRR->liga=aux;
+            finRR=aux;
+       } 
+
+            
     }
-    
-    return aux->tamanio;
 }
 
 void Lista::particionar(Proceso *_proceso)
 {
-    Proceso *aux = inicio, *pos;
+    Proceso *aux = inicio;
 
     while (aux != NULL)
     {
         if (aux->status == HUECO && aux->tamanio >= (_proceso->tamanio * 2) && aux->tamanio > 32)
         {
-            this->nuevoProceso(0, aux->tamanio / 2, 0);
+            //this->nuevoProceso(0, aux->tamanio / 2, 0);
             aux->tamanio /= 2;
         }
         aux = aux->izq;
     }    
 }
 
-void Lista::asignMemoria(Proceso *_proceso)
+Proceso *Lista::asignMemoria(Proceso *_proceso)
 {
     Proceso *aux = inicio;
     //Recorremos la lista en busca de espacio
     while (aux != NULL)
     {
-        if (aux->status == HUECO)
+        if (aux->status == HUECO && _proceso->tamanio<=aux->tamanio)
         {
+            
             if (aux->tamanio >= (_proceso->tamanio * 2) && aux->tamanio > 32)    // muy grande
-            {
+            {   
+                
                 Proceso *p = new Proceso(0,aux->tamanio/2,0), *q = aux->izq;
                 aux->tamanio /= 2;               
-                p->izq = aux->izq;
+                p->izq = q;
                 p->der = aux;
-                if (q != NULL)
+
+                if (q != NULL){
                     q->der = p;
-                else
-                    inicio = p;
+                    aux->izq=p;
+                }
+
+               else{
+                inicio = p;
                 aux->izq = p;
                 aux = p;
-                
+               }
+
+                // Declaramos la nueva particion creada como hueca. 
+               p->status=HUECO;
                 
                 //Particiona
             }
@@ -126,7 +138,7 @@ void Lista::asignMemoria(Proceso *_proceso)
                     aux->status = ENMEMORIA;
                     
                     //asigna
-                    return;
+                    return aux;
                 }
             } 
             
@@ -135,6 +147,11 @@ void Lista::asignMemoria(Proceso *_proceso)
             aux = aux->der;
     }
     
+    _proceso->status=ENESPERA;
+
+    return _proceso;
+
+
 }
 
 
@@ -173,3 +190,26 @@ void Lista::imprimir()
     }
     cout << endl;
 }
+
+//Imprime la lista de listos apuntada por el nodo inicioRR
+
+void Lista::imprimir_ListaListos()
+{
+    cout << endl;
+    if (inicioRR == NULL)
+    {
+        cout << "Lista Vacia..." << endl;
+    }
+    else
+    {
+        Proceso *aux = inicioRR;
+        while (aux != NULL)
+        {
+            imprimirProceso(aux);
+            aux=aux->liga;
+    
+        }
+    }
+    cout << endl;
+}
+

@@ -80,11 +80,12 @@ void imprimirProceso(Proceso *p){
 }
 
 //Llenar proceso nuevo con datos aleatorios dentro de los parametros establecidos
-Proceso *Proceso::llenarProceso(int id, int tamMax, int maxCuantos){
+Proceso *llenarProceso(int ide, int tamMax, int maxCuantos){
 
-    Proceso *aux;
+    Proceso *aux=new Proceso();
 
-    aux->id=id;
+
+    aux->id=ide;
     aux->tamanio=1+rand()%(tamMax-1+1);
     aux->cuanto=1+rand()%(maxCuantos-1+1);
 

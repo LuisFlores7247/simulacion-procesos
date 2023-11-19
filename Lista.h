@@ -36,12 +36,13 @@ public:
 
     void insertaInicio(int, int, int);
     void insertaFinal(int, int, int);
-    int nuevoProceso(int, int, int);
+    void nuevoProceso(Proceso *);
     void particionar(Proceso *);
-    void asignMemoria(Proceso *);
+    Proceso *asignMemoria(Proceso *);
     Proceso hayEspacio(Proceso *);
 
     void imprimir();
+    void imprimir_ListaListos();
 
 private:
     Proceso *inicio;
