@@ -1,3 +1,4 @@
+#include <iostream>
 #include "Lista.h"
 
 // Constructor de la clase Lista
@@ -6,42 +7,77 @@ Lista::Lista()
     inicio = fin = NULL; // Inicializa los apuntadores
 }
 
+// Setters
+
+void Lista::setInicio(Proceso *_inicio)
+{
+    inicio->der = _inicio;
+}
+
+void Lista::setFin(Proceso *_fin)
+{
+    fin = _fin;
+}
+
+// Getters
+
+Proceso *Lista::getInicio()
+{
+    return inicio;
+}
+
+Proceso *Lista::getFin()
+{
+    return fin;
+}
+
 // Metodos de la clase Lista
 int Lista::nuevoProceso(int _id, int _tamanio, int _cuanto)
 {
     Proceso *aux = new Proceso(_id, _tamanio, _cuanto); // Crea un nuevo nodo
-    if (_id != 0 && _cuanto != 0)
+    if (inicio == NULL)
     {
-        fin = aux; // El nuevo nodo es el fin de la lista
+        fin = aux;
     }
     else
     {
-        this->buddySystem(aux);
-        if (inicio == NULL)
-        {
-            inicio = aux; // Si la lista está vacía, el nuevo nodo es el inicio y el fin
-        }
-        else
-        {
-            fin->liga = aux; // Si no, el nuevo nodo se liga al final de la lista
-        }
+        aux->der = inicio;
+        aux->izq = NULL;
+        inicio->izq = aux;
     }
+
+    inicio = aux;
 
     return aux->tamanio;
 }
 
-void Lista::buddySystem(Proceso *_proceso)
+void Lista::particionar(Proceso *_proceso)
 {
-    Proceso *aux = inicio;
+    Proceso *aux = inicio, *pos;
 
-    while (aux != NULL && aux->tamanio >= 64)
+    while (aux != NULL)
     {
-        if (aux->tamanio >= (_proceso->tamanio * 2))
+        if (aux->status == HUECO && aux->tamanio >= (_proceso->tamanio * 2) && aux->tamanio > 32)
         {
             this->nuevoProceso(0, aux->tamanio / 2, 0);
             aux->tamanio /= 2;
         }
-        aux = aux->liga;
+        aux = aux->izq;
+    }
+}
+
+Proceso Lista::hayEspacio(Proceso *_proceso)
+{
+    Proceso *aux = inicio;
+    Proceso p;
+    while (aux != NULL)
+    {
+        if (aux->status == HUECO && (aux->tamanio / 2))
+        {
+            p = *aux;
+            return p;
+        }
+        aux = aux->der;
     }
 }
 
@@ -57,8 +93,10 @@ void Lista::imprimir()
         Proceso *aux = inicio;
         while (aux != NULL)
         {
-            cout << "[" << aux->id << "," << aux->tamanio << "," << aux->cuanto << "," << aux->mem_asignada << "]";
-            aux = aux->liga;
+            aux->status == HUECO ? cout << "[" << aux->id << "," << aux->tamanio << "," << aux->cuanto << "]"
+                                 : cout << "[" << aux->id << "," << aux->tamanio << "(" << aux->mem_asignada << ")," << aux->cuanto << "]";
+
+            aux = aux->der;
         }
     }
     cout << endl;
