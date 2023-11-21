@@ -44,6 +44,9 @@ public:
     //Imprimir datos de un proceso
     friend void imprimirProceso(Proceso *p);
 
+    //Round Robin
+
+    
 };
 
 #endif

@@ -63,22 +63,22 @@ void Lista::nuevoProceso(Proceso *aux)
     }
 
     //Parte de Round Robin
-    if (aux->id != 0)   //Si es cero quiere decir que se creo un hueco y no es relevante para el Round Robin
-    {
-        if (inicioRR == NULL){
-        //Si es el primer proceso a entrar, fija el inicio de la lista
-            inicioRR= finRR = aux;
-        }
-       else{  
+    // if (aux->id != 0)   //Si es cero quiere decir que se creo un hueco y no es relevante para el Round Robin
+    // {
+    //     if (inicioRR == NULL){
+    //     //Si es el primer proceso a entrar, fija el inicio de la lista
+    //         inicioRR= finRR = aux;
+    //     }
+    //    else{  
            
-            /*aux->liga=inicioRR
-            inicioRR=aux*/
-            finRR->liga=aux;
-            finRR=aux;
-       } 
+    //         /*aux->liga=inicioRR
+    //         inicioRR=aux*/
+    //         finRR->liga=aux;
+    //         finRR=aux;
+    //    } 
 
             
-    }
+    // }
 }
 
 void Lista::particionar(Proceso *_proceso)

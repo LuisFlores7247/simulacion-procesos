@@ -63,14 +63,13 @@ int main()
     sleep(1.5);
 
     /* Repite un ciclo desde 1 hasta el total de procesos. Llena el proceso con datos
-    aleatorios, luego introduce el proceso a la lista de listos, como paso siguiente
-    imprime el proceso generado y realiza la asignacion en memoria, la cual retorna un 
-   apuntador a un objeto del tipo proceso; si el proceso en su atributo status 
-   tiene almacenado un "ENMEMORIA", se procede a imprimir la lista actualizada con 
-   el nuevo proceso, sino, (el status del proceso es en espera) se indica que el 
-   proceso no pudo entrar a memoria y se continua la ejecucion de la simulacion, 
-   manteniendo el proceso en espera sin generar uno nuevo, hasta que hay algun 
-   lugar disonible*/
+    aleatoriosl, como paso siguiente imprime el proceso generado y realiza la asignacion en memoria,
+    la cual retorna un apuntador a un objeto del tipo proceso; si el proceso en su atributo status 
+    tiene almacenado un "ENMEMORIA", se procede a imprimir la lista actualizada con 
+    el nuevo proceso, sino, (el status del proceso es en espera) se indica que el 
+    proceso no pudo entrar a memoria y se continua la ejecucion de la simulacion, 
+    manteniendo el proceso en espera sin generar uno nuevo, hasta que hay algun 
+    lugar disonible*/
 
 
     for(int i=1; i<=numProces; i++){
