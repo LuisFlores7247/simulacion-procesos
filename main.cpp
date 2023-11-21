@@ -79,7 +79,7 @@ int main()
         proceso_en_espera: 
         cout<<endl<<"Proceso "<<i<<":   ";
         imprimirProceso(p);
-        p=l->asignMemoria(p);
+        l->asignMemoria(p);
         if(p->status==ENMEMORIA){  
             cout<<endl;
             l->nuevoProceso(p);     
@@ -130,3 +130,11 @@ int main(int argc, char const *argv[])
 
 
 */
+
+// int main(void)
+// {
+//     srand(time(NULL));
+//     cout << endl << "Hola!!, bienvenido a la simulacion de gestion de memoria y procesos del equipo 4!!!";
+//     cout << endl << "Esperamos que este nuestro proyecto final de sistemas operativos te sea de tu agrado";
+
+// }

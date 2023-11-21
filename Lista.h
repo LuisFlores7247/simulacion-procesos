@@ -38,7 +38,7 @@ public:
     void insertaFinal(int, int, int);
     void nuevoProceso(Proceso *);
     void particionar(Proceso *);
-    Proceso *asignMemoria(Proceso *);
+    void asignMemoria(Proceso *);
     Proceso hayEspacio(Proceso *);
 
     void imprimir();

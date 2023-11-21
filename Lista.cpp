@@ -96,7 +96,7 @@ void Lista::particionar(Proceso *_proceso)
     }    
 }
 
-Proceso *Lista::asignMemoria(Proceso *_proceso)
+void Lista::asignMemoria(Proceso *_proceso)
 {
     Proceso *aux = inicio;
     //Recorremos la lista en busca de espacio
@@ -115,17 +115,12 @@ Proceso *Lista::asignMemoria(Proceso *_proceso)
 
                 if (q != NULL){
                     q->der = p;
-                    aux->izq=p;
                 }
-
                else{
                 inicio = p;
-                aux->izq = p;
                 aux = p;
                }
-
-                // Declaramos la nueva particion creada como hueca. 
-               p->status=HUECO;
+                aux->izq = p;
                 
                 //Particiona
             }
@@ -138,7 +133,7 @@ Proceso *Lista::asignMemoria(Proceso *_proceso)
                     aux->status = ENMEMORIA;
                     
                     //asigna
-                    return aux;
+                    return ;
                 }
             } 
             
@@ -148,8 +143,6 @@ Proceso *Lista::asignMemoria(Proceso *_proceso)
     }
     
     _proceso->status=ENESPERA;
-
-    return _proceso;
 
 
 }
