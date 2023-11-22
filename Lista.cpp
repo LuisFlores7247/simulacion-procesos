@@ -88,7 +88,6 @@ STATUS Lista::asignMemoria(Proceso *_proceso)
     {
         if (aux->status == HUECO && _proceso->tamanio<=aux->tamanio)
         {
-            
             if (aux->tamanio >= (_proceso->tamanio * 2) && aux->tamanio > 32)    // muy grande
             {   
                 //Particiona
@@ -114,6 +113,7 @@ STATUS Lista::asignMemoria(Proceso *_proceso)
                     aux->status = ENMEMORIA;
                     //Como el proceso esta en memoria, se incluye en la lista de Round Robin
                     this->agregarAlistaRR(aux);
+                    
                     
                     return ENMEMORIA;
                 }
@@ -145,14 +145,14 @@ Proceso Lista::hayEspacio(Proceso *_proceso)
 void Lista::agregarAlistaRR(Proceso* aux)
 {
     //Parte de Round Robin
-    aux->liga = nullptr;
+    aux->liga = NULL;
     if (aux->id != 0)   //Si es cero quiere decir que se creo un hueco y no es relevante para el Round Robin
     {
         if (inicioRR == NULL){
-        //Si es el primer proceso a entrar, fija el inicio de la lista
-            inicioRR= aux;
+            //Si es el primer proceso a entrar, fija el inicio de la lista
+            inicioRR = aux;
         }
-       else
+        else
         {  
            finRR->liga = aux;
         } 
@@ -188,13 +188,32 @@ void Lista::ejecucion(const NUM_CPUS aux, const int cuanMax)
 {
     //Funcion que, dependiendo de la cantidad de procesadores que se establecieron, se ejecutan x cantidad de procesos restando los cuantos del sistema a los 
     //cuantos necesarios para su ejecucion
-    Proceso *q = inicioRR;
-    int n;
-    for (int i = 0; i < aux; i++)
+    Proceso *q = inicioRR, *p = finRR;
+    bool band = true;
+    for (int i = 0; i < aux; i++)   //Este ciclo se repite la cantidad de procesadores que se tiene
     {
-        if (q != NULL)
+        if (band)
         {
-            (q->cuanto - cuanMax < 0) ? n = 0 : n = q->cuanto - cuanMax;
+            if (q == p)
+                band = false;
+            
+            cout << endl << "El proceso " << imprimirProceso(q) << " esta siendo ejecutado en el procesador: " << i+1;
+            if (q->cuanto - cuanMax < 0)    //Los cuantos del proceso se acaban despues de esta ejecucion
+            {
+                q->cuanto = 0;
+                cout << endl << "El proceso termino su ejecucion, descargando de memoria...";
+                //Poner aqui funcion que descargue el proceso de memoria y condense la memoria si es posible
+                q = q->liga;
+            }
+            else    //El proceso no acabo su ejecucion en esta vuelta, se va al final de la cola de RR, se recorre la cola
+            {
+                q->cuanto -= cuanMax;
+                finRR->liga = q;
+                inicioRR = q->liga;
+                finRR = q;
+                q = q->liga;
+                finRR->liga = NULL;
+            }
             
         }
         else
@@ -223,4 +242,15 @@ void Lista::imprimir_ListaListos()
         }
     }
     cout << endl;
+}
+
+void Lista::descargandoProceso()
+{
+    //El proceso que se va a descargar SIEMPRE sera el de InicioRR
+    //No voy a tocar nada de la memoria ni buddy sistem
+    inicioRR->id = 0;
+    inicioRR->mem_asignada = 0;
+    inicioRR->tamanio = 0;
+    inicioRR = inicioRR->liga;
+
 }

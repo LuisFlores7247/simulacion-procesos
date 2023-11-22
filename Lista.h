@@ -55,6 +55,7 @@ public:
 
     //Round Robin
     void ejecucion(const NUM_CPUS, const int);
+    void descargandoProceso();
 
 private:
     Proceso *inicio;

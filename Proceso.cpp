@@ -73,10 +73,10 @@ Proceso &Proceso::operator=(const Proceso &_proceso)
 
 // Resto del código para los procesos
 
-void imprimirProceso(Proceso *p){
-
-    cout<<"["<<p->id<<","<<p->tamanio<<","<<p->cuanto<<"]";
-    
+string imprimirProceso(Proceso *p){
+    string aux = "[" + to_string(p->id) + "," + to_string(p->tamanio) + "," + to_string(p->cuanto) + "]";
+    // cout<<"["<<p->id<<","<<p->tamanio<<","<<p->cuanto<<"]";
+    return aux;
 }
 
 //Llenar proceso nuevo con datos aleatorios dentro de los parametros establecidos

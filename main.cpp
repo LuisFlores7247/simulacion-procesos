@@ -53,7 +53,9 @@ int main()
 
     cout<<"Ingresa el maximo de cuantos de un proceso: ";
     cin>>cuanMax;
-    
+    int cuanSistema;
+    cout << "Ingresa los cuantos del sistema: ";
+    cin >>cuanSistema;
     cout<<endl<<"Numero de procesos a ejecutar: ";
     cin>>numProces;
     
@@ -86,10 +88,9 @@ int main()
         }
         
         
-        cout<<endl<<"Proceso "<<i<<":   ";
-        imprimirProceso(p);
-        band = p->status = l->asignMemoria(p);
+        cout<<endl<<"Proceso "<<i<<":   " << imprimirProceso(p); 
         
+        band = p->status = l->asignMemoria(p);
         if(p->status==ENMEMORIA){  
             cout<<endl;    
             l->imprimir();
@@ -99,7 +100,7 @@ int main()
             cout<<endl; system("pause");
         }
         //Parte de la ejecucion (Round Robin)
-        l->ejecucion(cpus,cuanMax);
+        l->ejecucion(cpus,cuanSistema);
 
     }
     
