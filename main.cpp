@@ -1,20 +1,14 @@
-#include <iostream>
 #include "Funciones.h"
-#include "ctime"
-#include "cstdlib"
-#include <unistd.h>
+#include "Lista.cpp"
+
 
 using namespace std;
 
 int main()
 {
-    srand(time(NULL));
-
     system("cls");
 
-    cout << "Iniciando simulacion..." << endl;
-    sleep(1.5);
-    iniciar();
+    iniciarSimulacion();
 
     return 0;
 }

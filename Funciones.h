@@ -2,7 +2,10 @@
 #define FUNCIONES_H
 
 #include <iostream>
+#include <ctime>
 #include "Lista.cpp"
+#include "cstdlib"
+#include "windows.h"
 
 enum TAM_MEMORIA
 {
@@ -11,7 +14,7 @@ enum TAM_MEMORIA
     TAM_8Mb = 8192
 };
 
-void iniciar();
+void iniciarSimulacion();
 
 void simulacion(Proceso *, Lista *, int, int);
 
@@ -21,8 +24,9 @@ int pedirCuanMax();
 
 int crearMemoria(int, Lista *);
 
-void iniciar()
+void iniciarSimulacion()
 {
+    srand(time(NULL));
     Lista *l = new Lista();
 
     Proceso *p = NULL;
@@ -32,6 +36,9 @@ void iniciar()
     int ram = crearMemoria(pedirTamMemoria(), l);
     int tamMax = pedirTamMax(ram);
     int cuanMax = pedirCuanMax();
+
+    cout << "Iniciando simulacion..." << endl;
+    Sleep(1.5);
 
     simulacion(p, l, tamMax, cuanMax);
 }
@@ -85,11 +92,16 @@ void simulacion(Proceso *p, Lista *l, int tamMax, int cuanMax)
 int pedirTamMemoria()
 {
     int opc;
-    cout << "Tamanios de memoria disponibles: " << endl;
-    cout << "1. 1Mb\n2. 4Mb\n3. 8Mb\n";
-    cout << endl
-         << "TU opcion: ";
-    cin >> opc;
+    do
+    { // Repite el ciclo mientras la opcion sea invalida
+        system("cls");
+        cout << "Tamanios de memoria disponibles: " << endl;
+        cout << "1. 1Mb\n2. 4Mb\n3. 8Mb\n";
+        cout << endl
+             << "TU opcion: ";
+        cin >> opc;
+    } while (opc < 1 || opc > 3);
+
     return opc;
 }
 
