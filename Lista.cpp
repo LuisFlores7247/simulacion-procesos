@@ -62,23 +62,7 @@ void Lista::nuevoProceso(Proceso *aux)
     
     }
 
-    //Parte de Round Robin
-    // if (aux->id != 0)   //Si es cero quiere decir que se creo un hueco y no es relevante para el Round Robin
-    // {
-    //     if (inicioRR == NULL){
-    //     //Si es el primer proceso a entrar, fija el inicio de la lista
-    //         inicioRR= finRR = aux;
-    //     }
-    //    else{  
-           
-    //         /*aux->liga=inicioRR
-    //         inicioRR=aux*/
-    //         finRR->liga=aux;
-    //         finRR=aux;
-    //    } 
 
-            
-    // }
 }
 
 void Lista::particionar(Proceso *_proceso)
@@ -96,7 +80,7 @@ void Lista::particionar(Proceso *_proceso)
     }    
 }
 
-void Lista::asignMemoria(Proceso *_proceso)
+STATUS Lista::asignMemoria(Proceso *_proceso)
 {
     Proceso *aux = inicio;
     //Recorremos la lista en busca de espacio
@@ -107,33 +91,31 @@ void Lista::asignMemoria(Proceso *_proceso)
             
             if (aux->tamanio >= (_proceso->tamanio * 2) && aux->tamanio > 32)    // muy grande
             {   
-                
+                //Particiona
                 Proceso *p = new Proceso(0,aux->tamanio/2,0), *q = aux->izq;
                 aux->tamanio /= 2;               
                 p->izq = q;
                 p->der = aux;
 
-                if (q != NULL){
+                if (q != NULL)
                     q->der = p;
-                }
-               else{
-                inicio = p;
-                aux = p;
-               }
+                else
+                    inicio = p;                
                 aux->izq = p;
-                
-                //Particiona
+                aux = p;                
             }
             else
             {
                 if (aux->tamanio >= _proceso->tamanio)   // Corrobora que el espacio no es muy pequenio
                 {
+                    //asigna el proceso a memora
                     _proceso->mem_asignada = aux->tamanio;
                     *aux = *_proceso;
                     aux->status = ENMEMORIA;
+                    //Como el proceso esta en memoria, se incluye en la lista de Round Robin
+                    this->agregarAlistaRR(aux);
                     
-                    //asigna
-                    return ;
+                    return ENMEMORIA;
                 }
             } 
             
@@ -141,10 +123,7 @@ void Lista::asignMemoria(Proceso *_proceso)
         else
             aux = aux->der;
     }
-    
-    _proceso->status=ENESPERA;
-
-
+    return ENESPERA;
 }
 
 
@@ -160,6 +139,24 @@ Proceso Lista::hayEspacio(Proceso *_proceso)
             return p;
         }
         aux = aux->der;
+    }
+}
+
+void Lista::agregarAlistaRR(Proceso* aux)
+{
+    //Parte de Round Robin
+    aux->liga = nullptr;
+    if (aux->id != 0)   //Si es cero quiere decir que se creo un hueco y no es relevante para el Round Robin
+    {
+        if (inicioRR == NULL){
+        //Si es el primer proceso a entrar, fija el inicio de la lista
+            inicioRR= aux;
+        }
+       else
+        {  
+           finRR->liga = aux;
+        } 
+        finRR = aux;            
     }
 }
 
@@ -184,7 +181,29 @@ void Lista::imprimir()
     cout << endl;
 }
 
-//Imprime la lista de listos apuntada por el nodo inicioRR
+//Metodos para el correcto funcionamiento de Round Robin
+
+
+void Lista::ejecucion(const NUM_CPUS aux, const int cuanMax)
+{
+    //Funcion que, dependiendo de la cantidad de procesadores que se establecieron, se ejecutan x cantidad de procesos restando los cuantos del sistema a los 
+    //cuantos necesarios para su ejecucion
+    Proceso *q = inicioRR;
+    int n;
+    for (int i = 0; i < aux; i++)
+    {
+        if (q != NULL)
+        {
+            (q->cuanto - cuanMax < 0) ? n = 0 : n = q->cuanto - cuanMax;
+            
+        }
+        else
+        {
+            cout << endl << "El procesador " << i+1 << "No contiene ningun proceso, no hay procesos necesarios a ejecutar";
+        }
+    }
+    
+}
 
 void Lista::imprimir_ListaListos()
 {
@@ -205,4 +224,3 @@ void Lista::imprimir_ListaListos()
     }
     cout << endl;
 }
-

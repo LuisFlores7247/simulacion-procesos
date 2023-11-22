@@ -53,10 +53,15 @@ int main()
 
     cout<<"Ingresa el maximo de cuantos de un proceso: ";
     cin>>cuanMax;
-
+    
     cout<<endl<<"Numero de procesos a ejecutar: ";
     cin>>numProces;
-
+    
+    cout << endl << "Por ultimo, dame la cantidad de procesadores que ejecutaran la simulacion: \n1 / 2 / 4 / 8" << endl;
+    NUM_CPUS cpus;
+    cin >> opc;
+    (opc == 1)  ? cpus = CPU_1 : (opc == 2) ? cpus = CPU_2 : (opc == 4) ? cpus = CPU_4 : (opc == 8) ? cpus = CPU_8 : cpus = CPU_1;
+    //VALIDACION QUE EL USUARIO INGRESE EL NUMERO CORRECTO NECESARIO
     system("cls");
 
     cout<<endl<<"Iniciando simulacion..."<<endl;
@@ -70,30 +75,31 @@ int main()
     proceso no pudo entrar a memoria y se continua la ejecucion de la simulacion, 
     manteniendo el proceso en espera sin generar uno nuevo, hasta que hay algun 
     lugar disonible*/
-
+    STATUS band = ENMEMORIA;    //Esta bandera es la que dictara la creacion de procesos o no, si tiene un valor de
+                                //ENMEMORIA, significa que puede seguir creando procesos ya que todos estan en memoria
+                                //en caso de que este ENESPERA, significa que existe un proceso en espera por lo cual no se debe generar procesos
 
     for(int i=1; i<=numProces; i++){
-
-        p=llenarProceso(i,tamMax,cuanMax);
+        if (band == ENMEMORIA)
+        {
+            p=llenarProceso(i,tamMax,cuanMax);
+        }
         
-        proceso_en_espera: 
+        
         cout<<endl<<"Proceso "<<i<<":   ";
         imprimirProceso(p);
-        l->asignMemoria(p);
+        band = p->status = l->asignMemoria(p);
+        
         if(p->status==ENMEMORIA){  
-            cout<<endl;
-            l->nuevoProceso(p);     
+            cout<<endl;    
             l->imprimir();
         }
         else{
             cout<<endl<<"En espera, espacio no disponible...";
             cout<<endl; system("pause");
-            
-            /*Salta al instante despues de crear el proceso aleatorio para
-            no crear uno nuevo y mantener el mismo hasta que se asigne a memoria*/
-            goto proceso_en_espera;
         }
-
+        //Parte de la ejecucion (Round Robin)
+        l->ejecucion(cpus,cuanMax);
 
     }
     
