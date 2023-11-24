@@ -1,6 +1,7 @@
 #ifndef PROCESO_H
 #define PROCESO_H
-
+#include <string>
+using namespace std;
 
 enum STATUS
 {
@@ -42,8 +43,11 @@ public:
     friend Proceso *llenarProceso(int, int, int);
 
     //Imprimir datos de un proceso
-    friend void imprimirProceso(Proceso *p);
+    friend string imprimirProceso(Proceso *p);
 
+    //Round Robin
+
+    
 };
 
 #endif

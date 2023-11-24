@@ -7,13 +7,6 @@
 #include "cstdlib"
 #include "windows.h"
 
-enum TAM_MEMORIA
-{
-    TAM_1Mb = 1024,
-    TAM_4Mb = 4096,
-    TAM_8Mb = 8192
-};
-
 void iniciarSimulacion();
 
 void simulacion(Proceso *, Lista *, int, int);
@@ -63,7 +56,7 @@ void simulacion(Proceso *p, Lista *l, int tamMax, int cuanMax)
         cout << endl
              << "Proceso " << i << ":   ";
         imprimirProceso(p);
-        p = l->asignMemoria(p);
+        p->status = l->asignMemoria(p);
         if (p->status == ENMEMORIA)
         {
             cout << endl;
