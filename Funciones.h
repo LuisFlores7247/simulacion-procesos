@@ -7,6 +7,7 @@
 #include "cstdlib"
 #include "windows.h"
 
+
 void iniciarSimulacion();
 
 void simulacion(Proceso *, Lista *, int, int,int,NUM_CPUS);
