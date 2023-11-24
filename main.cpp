@@ -1,5 +1,4 @@
 #include "Funciones.h"
-#include "Lista.cpp"
 
 
 using namespace std;
@@ -8,63 +7,9 @@ int main()
 {
     srand(time(NULL));
 
-    Lista *l = new Lista();
-
-    Proceso *p=NULL;
-
-    int opc=0, tamMax=0, cuanMax=0, numProces=0;
-
-    TAM_MEMORIA ram;
-
-    cout << "Tamanios de memoria disponibles: " << endl;
-    cout << "1. 1Mb\n2. 4Mb\n3. 8Mb\n";
-    cout<<endl<<"TU opcion: ";
-    cin >> opc;
-
-    /* Crea un proceso inicial el cual tiene como tarea almacenar el valor de 
-    la memoria RAM para luego en base a este generar las particiones de memoria*/
-    if (opc == 1){
-        l->nuevoProceso(new Proceso(0,TAM_1Mb,0));
-        ram=TAM_1Mb;
-    }
-        
-    else if (opc == 2){
-        l->nuevoProceso(new Proceso(0,TAM_4Mb,0));
-        ram=TAM_4Mb;
-    }
-    else if (opc == 3){
-
-        l->nuevoProceso(new Proceso(0,TAM_8Mb,0));
-        ram=TAM_8Mb;
-    }
-    //Vuelve a pedir el dato mientras el tamaño maximo sea mas de la mitad de la memoria ram
-    do{
-
-        cout<<endl<<"Ingresa el tamanio maximo asignado a un proceso: ";
-        cin>>tamMax;
-
-        if(tamMax>ram/2){
-            cout<<"Opcio invalida. Introduce un valor menor";
-        }
-
-    }while(tamMax>ram/2);
-
-    cout<<"Ingresa el maximo de cuantos de un proceso: ";
-    cin>>cuanMax;
-    int cuanSistema;
-    cout << "Ingresa los cuantos del sistema: ";
-    cin >>cuanSistema;
-    cout<<endl<<"Numero de procesos a ejecutar: ";
-    cin>>numProces;
-    
-    cout << endl << "Por ultimo, dame la cantidad de procesadores que ejecutaran la simulacion: \n1 / 2 / 4 / 8" << endl;
-    NUM_CPUS cpus;
-    cin >> opc;
-    (opc == 1)  ? cpus = CPU_1 : (opc == 2) ? cpus = CPU_2 : (opc == 4) ? cpus = CPU_4 : (opc == 8) ? cpus = CPU_8 : cpus = CPU_1;
-    //VALIDACION QUE EL USUARIO INGRESE EL NUMERO CORRECTO NECESARIO
     system("cls");
 
-    // iniciarSimulacion();
+    iniciarSimulacion();
 
     return 0;
 }
@@ -92,14 +37,4 @@ int main(int argc, char const *argv[])
     //La simulacion evalua si se presiono esq o se cambio la velocidad de impresion de datos, en ese caso, se hacen las acciones correspondientes
     return 0;
 }
-
-
 */
-
-// int main(void)
-// {
-//     srand(time(NULL));
-//     cout << endl << "Hola!!, bienvenido a la simulacion de gestion de memoria y procesos del equipo 4!!!";
-//     cout << endl << "Esperamos que este nuestro proyecto final de sistemas operativos te sea de tu agrado";
-
-// }

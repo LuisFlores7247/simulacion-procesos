@@ -1,10 +1,8 @@
 #ifndef LISTA_H
 #define LISTA_H
 
-#include <iostream>
 #include "Proceso.cpp"
 
-using namespace std;
 
 enum TAM_MEMORIA
 {

@@ -1,6 +1,8 @@
 #include <iostream>
 #include "Lista.h"
 
+using namespace std;
+
 // Constructor de la clase Lista
 Lista::Lista()
 {
