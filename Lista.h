@@ -12,6 +12,7 @@ enum TAM_MEMORIA
 };
 enum NUM_CPUS
 {
+    CPU_0 = 0,
     CPU_1 = 1,
     CPU_2 = 2,
     CPU_4 = 4,

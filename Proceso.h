@@ -1,6 +1,7 @@
 #ifndef PROCESO_H
 #define PROCESO_H
 #include <string>
+#include <cctype>
 using namespace std;
 
 enum STATUS

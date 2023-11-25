@@ -9,12 +9,12 @@
 
 void iniciarSimulacion();
 
-void simulacion(Proceso *, Lista *, int, int,int,NUM_CPUS);
+void simulacion(Proceso *, Lista *, int, int, int, NUM_CPUS);
 
 int pedirTamMemoria();
 int pedirTamMax(int);
 int pedirCuanMax();
-int pedirCuanSistema();
+int pedirCuanSistema(int);
 NUM_CPUS pedirProcesadores();
 int crearMemoria(int, Lista *);
 
@@ -25,17 +25,16 @@ void iniciarSimulacion()
 
     Proceso *p = NULL;
 
-
     int ram = crearMemoria(pedirTamMemoria(), l);
     int tamMax = pedirTamMax(ram);
     int cuanMax = pedirCuanMax();
-    int cuanSistema = pedirCuanSistema();
+    int cuanSistema = pedirCuanSistema(cuanMax);
     NUM_CPUS cpus = pedirProcesadores();
 
     cout << "Iniciando simulacion..." << endl;
     Sleep(1.5);
 
-    simulacion(p, l, tamMax, cuanMax,cuanSistema,cpus);
+    simulacion(p, l, tamMax, cuanMax, cuanSistema, cpus);
 }
 
 void simulacion(Proceso *p, Lista *l, int tamMax, int cuanMax, int cuanSistema, NUM_CPUS cpus)
@@ -43,57 +42,77 @@ void simulacion(Proceso *p, Lista *l, int tamMax, int cuanMax, int cuanSistema, 
 
     /* Repite un ciclo desde 1 hasta el total de procesos. Llena el proceso con datos
     aleatoriosl, como paso siguiente imprime el proceso generado y realiza la asignacion en memoria,
-    la cual retorna un apuntador a un objeto del tipo proceso; si el proceso en su atributo status 
-    tiene almacenado un "ENMEMORIA", se procede a imprimir la lista actualizada con 
-    el nuevo proceso, sino, (el status del proceso es en espera) se indica que el 
-    proceso no pudo entrar a memoria y se continua la ejecucion de la simulacion, 
-    manteniendo el proceso en espera sin generar uno nuevo, hasta que hay algun 
+    la cual retorna un apuntador a un objeto del tipo proceso; si el proceso en su atributo status
+    tiene almacenado un "ENMEMORIA", se procede a imprimir la lista actualizada con
+    el nuevo proceso, sino, (el status del proceso es en espera) se indica que el
+    proceso no pudo entrar a memoria y se continua la ejecucion de la simulacion,
+    manteniendo el proceso en espera sin generar uno nuevo, hasta que hay algun
     lugar disonible*/
-    STATUS band = ENMEMORIA;    //Esta bandera es la que dictara la creacion de procesos o no, si tiene un valor de
-                                //ENMEMORIA, significa que puede seguir creando procesos ya que todos estan en memoria
-                                //en caso de que este ENESPERA, significa que existe un proceso en espera por lo cual no se debe generar procesos
+    STATUS band = ENMEMORIA; // Esta bandera es la que dictara la creacion de procesos o no, si tiene un valor de
+                             // ENMEMORIA, significa que puede seguir creando procesos ya que todos estan en memoria
+                             // en caso de que este ENESPERA, significa que existe un proceso en espera por lo cual no se debe generar procesos
 
-    for(int i=1; i<=5; i++){
+    for (int i = 1; i <= 5; i++)
+    {
         if (band == ENMEMORIA)
         {
-            p=llenarProceso(i,tamMax,cuanMax);
+            p = llenarProceso(i, tamMax, cuanMax);
         }
-        
-        
-        cout<<endl<<"Proceso "<<i<<":   " << imprimirProceso(p); 
-        
+
+        cout << endl
+             << "Proceso " << i << ":   " << imprimirProceso(p);
+
         band = p->status = l->asignMemoria(p);
-        if(p->status==ENMEMORIA){  
-            cout<<endl;    
+        if (p->status == ENMEMORIA)
+        {
+            cout << endl;
             l->imprimir();
         }
-        else{
-            cout<<endl<<"En espera, espacio no disponible...";
-            cout<<endl; system("pause");
+        else
+        {
+            cout << endl
+                 << "En espera, espacio no disponible...";
+            cout << endl;
+            system("pause");
         }
-        //Parte de la ejecucion (Round Robin)
-        l->ejecucion(cpus,cuanSistema);
-
+        // Parte de la ejecucion (Round Robin)
+        l->ejecucion(cpus, cuanSistema);
     }
-    
-    cout<<endl<<endl<<"Lista de listos..."<<endl;
-    l->imprimir_ListaListos();
-    
 
+    cout << endl
+         << endl
+         << "Lista de listos..." << endl;
+    l->imprimir_ListaListos();
 }
 
 int pedirTamMemoria()
 {
     int opc;
+    bool check = false;
     do
     { // Repite el ciclo mientras la opcion sea invalida
         system("cls");
-        cout << "Tamanios de memoria disponibles: " << endl;
+        cout << "Tamanios de memoria disponibles : " << endl;
         cout << "1. 1Mb\n2. 4Mb\n3. 8Mb\n";
         cout << endl
-             << "TU opcion: ";
+             << "Selecciona del 1-3...";
+        cout << endl
+             << "Tu opcion: ";
         cin >> opc;
-    } while (opc < 1 || opc > 3);
+
+        if (opc < 1 || opc > 3)
+        {
+            cout << endl
+                 << "Opcion no disponible..." << endl;
+            check = true;
+            system("pause");
+        }
+        else
+        {
+            check = false;
+        }
+
+    } while (check == true);
 
     return opc;
 }
@@ -105,6 +124,7 @@ int pedirTamMax(int ram)
     do
     {
 
+        system("cls");
         cout << endl
              << "Ingresa el tamanio maximo asignado a un proceso: ";
         cin >> tamMax;
@@ -125,22 +145,68 @@ int pedirCuanMax()
     return cuanMax;
 }
 
-int pedirCuanSistema()
+int pedirCuanSistema(int cuanMax)
 {
     int cuanSistema;
-    cout << "Ingresa los cuantos del sistema: ";
-    cin >>cuanSistema;
+    bool check = false;
+    do
+    {
+        system("cls");
+        cout << endl
+             << "Ingresa los cuantos del sistema: ";
+        cin >> cuanSistema;
+
+        if (cuanSistema > cuanMax || cuanSistema <= 0)
+        {
+            cout << endl
+                 << "Cantidad de cuantos de procesamiento invalida!!!";
+            check = true;
+        }
+        else
+        {
+            check = false;
+        }
+
+    } while (check == true);
     return cuanSistema;
-    //validar que no sea mayor a cuanMax
+    // validar que no sea mayor a cuanMax
 }
 
 NUM_CPUS pedirProcesadores()
 {
     int opc;
+    bool check = false;
     NUM_CPUS cpus;
-    cout << endl << "Por ultimo, dame la cantidad de procesadores que ejecutaran la simulacion: \n1 / 2 / 4 / 8" << endl;
-    cin >> opc;
-    (opc == 1)  ? cpus = CPU_1 : (opc == 2) ? cpus = CPU_2 : (opc == 4) ? cpus = CPU_4 : (opc == 8) ? cpus = CPU_8 : cpus = CPU_1;
+    do
+    {
+        system("cls");
+        cout << endl
+             << "Por ultimo, dame la cantidad de procesadores que ejecutaran la simulacion: \n1 / 2 / 4 / 8" << endl;
+        cin >> opc;
+        if (opc < 1 || opc > 8)
+        {
+            cout << endl
+                 << "No. de Procesadores Invalido...";
+            check = true;
+        }
+        else
+        {
+            (opc == 1) ? cpus = CPU_1 : (opc == 2) ? cpus = CPU_2
+                                    : (opc == 4)   ? cpus = CPU_4
+                                    : (opc == 8)   ? cpus = CPU_8
+                                                   : CPU_0;
+            if (cpus == CPU_0)
+            {
+                cout << endl
+                     << "No. de Procesadores Invalido...";
+                check = true;
+            }
+            else
+            {
+                check = false;
+            }
+        }
+    } while (check == true);
     return cpus;
 }
 
