@@ -63,7 +63,7 @@ void simulacion(Proceso *p, Lista *l, int tamMax, int cuanMax, int cuanSistema)
         
         band = p->status = l->asignMemoria(p);
         if(p->status==ENMEMORIA){  
-            cout<<endl;    
+            cout << endl << "RAM: ";    
             l->imprimir();
         }
         else{
@@ -71,7 +71,11 @@ void simulacion(Proceso *p, Lista *l, int tamMax, int cuanMax, int cuanSistema)
             cout<<endl; system("pause");
         }
         //Parte de la ejecucion (Round Robin)
+        cout << endl << "Lista RR: ";
+        l->imprimir_ListaListos();
         l->ejecucion(cuanSistema);
+        cout << endl << "Lista RR: ";
+        l->imprimir_ListaListos();
 
     }
     
@@ -137,7 +141,7 @@ int crearMemoria(int opc, Lista *l)
 {
     TAM_MEMORIA ram;
     /* Crea un proceso inicial el cual tiene como tarea almacenar el valor de
-la memoria RAM para luego en base a este generar las particiones de memoria*/
+    la memoria RAM para luego en base a este generar las particiones de memoria*/
     if (opc == 1)
     {
         l->nuevoProceso(new Proceso(0, TAM_1Mb, 0));

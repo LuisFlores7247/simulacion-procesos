@@ -11,7 +11,7 @@ enum TAM_MEMORIA
     TAM_4Mb = 4096,
     TAM_8Mb = 8192
 };
-
+//Enum CPUS no necesario por el momento
 
 class Lista
 {
@@ -32,9 +32,9 @@ public:
 
     // Metodos de la clase Lista
     void nuevoProceso(Proceso *);
-    void particionar(Proceso *);
+    // void particionar(Proceso *);
     STATUS asignMemoria(Proceso *);
-    Proceso hayEspacio(Proceso *);
+    // Proceso hayEspacio(Proceso *);
 
     void agregarAlistaRR(Proceso*);
 
@@ -45,7 +45,7 @@ public:
 
     //Round Robin
     void ejecucion(const int);
-    void descargandoProceso();
+    // void descargandoProceso(); que esta funcion mandes el proceso a descargar como parametro de preferencia
 
 private:
     Proceso *inicio;
