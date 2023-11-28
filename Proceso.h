@@ -1,8 +1,7 @@
 #ifndef PROCESO_H
 #define PROCESO_H
-#include <string>
-using namespace std;
 
+using namespace std;
 
 enum STATUS
 {
@@ -25,6 +24,8 @@ public:
     Proceso *liga;
     Proceso(int = 0, int = 0, int = 0);
 
+    void descargarProceso();
+
     // setters
     void setId(int);
     void setTamanio(int);
@@ -40,15 +41,13 @@ public:
     // Sobrecarga de operadores
     Proceso &operator=(const Proceso &);
 
-    //Llenar proceso aleatoriamente
+    // Llenar proceso aleatoriamente
     friend Proceso *llenarProceso(int, int, int);
 
-    //Imprimir datos de un proceso
-    friend string imprimirProceso(Proceso *p);
+    // Imprimir datos de un proceso
+    friend string imprimirProceso(Proceso *);
 
-    //Round Robin
-
-    
+    // Round Robin
 };
 
 #endif

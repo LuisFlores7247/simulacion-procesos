@@ -1,5 +1,6 @@
 #include "Proceso.h"
 #include <iostream>
+
 using namespace std;
 
 // Constructor de la clase Proceso
@@ -72,22 +73,18 @@ Proceso &Proceso::operator=(const Proceso &_proceso)
 
 // Resto del código para los procesos
 
-string imprimirProceso(Proceso *p){
+string imprimirProceso(Proceso *p)
+{
     string aux = "[" + to_string(p->id) + "," + to_string(p->tamanio) + "," + to_string(p->cuanto) + "]";
     // cout<<"["<<p->id<<","<<p->tamanio<<","<<p->cuanto<<"]";
     return aux;
 }
 
-//Llenar proceso nuevo con datos aleatorios dentro de los parametros establecidos
-Proceso *llenarProceso(int ide, int tamMax, int maxCuantos){
-
-    Proceso *aux=new Proceso();
-
-
-    aux->id=ide;
-    aux->tamanio=1+rand()%(tamMax-1+1);
-    aux->cuanto=1+rand()%(maxCuantos-1+1);
-
-    return aux;
-
+void Proceso::descargarProceso()
+{
+    this->status = HUECO;
+    this->id = 0;
+    this->tamanio = mem_asignada;
+    this->cuanto = 0;
+    this->mem_asignada = 0;
 }

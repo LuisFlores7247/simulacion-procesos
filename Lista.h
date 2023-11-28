@@ -3,8 +3,6 @@
 
 #include "Proceso.cpp"
 
-
-
 enum TAM_MEMORIA
 {
     TAM_1Mb = 1024,
@@ -41,17 +39,16 @@ public:
     void particionar(Proceso *);
     STATUS asignMemoria(Proceso *);
     Proceso hayEspacio(Proceso *);
+    void juntarMemoria();
 
-    void agregarAlistaRR(Proceso*);
-
+    void agregarAlistaRR(Proceso *);
 
     // Metodos para imprimir
     void imprimir();
     void imprimir_ListaListos();
 
-    //Round Robin
+    // Round Robin
     void ejecucion(const NUM_CPUS, const int);
-    void descargandoProceso();
 
 private:
     Proceso *inicio;
