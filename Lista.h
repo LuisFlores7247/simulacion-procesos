@@ -11,13 +11,7 @@ enum TAM_MEMORIA
     TAM_4Mb = 4096,
     TAM_8Mb = 8192
 };
-enum NUM_CPUS
-{
-    CPU_1 = 1,
-    CPU_2 = 2,
-    CPU_4 = 4,
-    CPU_8 = 8
-};
+
 
 class Lista
 {
@@ -50,7 +44,7 @@ public:
     void imprimir_ListaListos();
 
     //Round Robin
-    void ejecucion(const NUM_CPUS, const int);
+    void ejecucion(const int);
     void descargandoProceso();
 
 private:

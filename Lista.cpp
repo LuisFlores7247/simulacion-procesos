@@ -163,7 +163,6 @@ void Lista::agregarAlistaRR(Proceso* aux)
 
 void Lista::imprimir()
 {
-    cout << endl;
     if (inicio == NULL)
     {
         cout << "Lista Vacia..." << endl;
@@ -179,48 +178,45 @@ void Lista::imprimir()
             aux = aux->der;
         }
     }
-    cout << endl;
 }
 
 //Metodos para el correcto funcionamiento de Round Robin
 
 
-void Lista::ejecucion(const NUM_CPUS aux, const int cuanMax)
+void Lista::ejecucion(const int cuanMax)
 {
     //Funcion que, dependiendo de la cantidad de procesadores que se establecieron, se ejecutan x cantidad de procesos restando los cuantos del sistema a los 
     //cuantos necesarios para su ejecucion
     Proceso *q = inicioRR, *p = finRR;
     bool band = true;
-    for (int i = 0; i < aux; i++)   //Este ciclo se repite la cantidad de procesadores que se tiene
+
+    if (band)
     {
-        if (band)
+        if (q == p)
+            band = false;
+        
+        cout << endl << "El proceso " << imprimirProceso(q) << " esta siendo ejecutado en el procesador: ";
+        if (q->cuanto - cuanMax < 0)    //Los cuantos del proceso se acaban despues de esta ejecucion
         {
-            if (q == p)
-                band = false;
-            
-            cout << endl << "El proceso " << imprimirProceso(q) << " esta siendo ejecutado en el procesador: " << i+1;
-            if (q->cuanto - cuanMax < 0)    //Los cuantos del proceso se acaban despues de esta ejecucion
-            {
-                q->cuanto = 0;
-                cout << endl << "El proceso termino su ejecucion, descargando de memoria...";
-                //Poner aqui funcion que descargue el proceso de memoria y condense la memoria si es posible
-                q = q->liga;
-            }
-            else    //El proceso no acabo su ejecucion en esta vuelta, se va al final de la cola de RR, se recorre la cola
-            {
-                q->cuanto -= cuanMax;
-                finRR->liga = q;
-                inicioRR = q->liga;
-                finRR = q;
-                q = q->liga;
-                finRR->liga = NULL;
-            }
-            
+            q->cuanto = 0;
+            cout << endl << "El proceso termino su ejecucion, descargando de memoria...";
+            //Poner aqui funcion que descargue el proceso de memoria y condense la memoria si es posible
+            q = q->liga;
         }
-        else
+        else    //El proceso no acabo su ejecucion en esta vuelta, se va al final de la cola de RR, se recorre la cola
         {
-            cout << endl << "El procesador " << i+1 << "No contiene ningun proceso, no hay procesos necesarios a ejecutar";
+            q->cuanto -= cuanMax;
+            finRR->liga = q;
+            inicioRR = q->liga;
+            finRR = q;
+            q = q->liga;
+            finRR->liga = NULL;
         }
+        
+    }
+    else
+    {
+        cout << endl << "El procesador no contiene ningun proceso, no hay procesos necesarios a ejecutar";
     }
     
 }
