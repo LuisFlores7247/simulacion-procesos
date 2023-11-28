@@ -172,3 +172,32 @@ void Lista::imprimir_ListaListos()
         }
     }
 }
+
+void Lista::juntarMemoria()
+{
+    // Funcion que recorre la lista de procesos y junta los huecos que se encuentren
+    Proceso *aux = inicio;
+    while (aux != NULL)
+    {
+        if (aux->der->tamanio < aux->tamanio)
+        {
+            aux = aux->der;
+        }
+        else
+        {
+            if (aux->status == HUECO && aux->der->status == HUECO && aux->tamanio == aux->der->tamanio)
+            {
+
+                aux->tamanio += aux->der->tamanio;
+                aux->der = aux->der->der;
+                aux->der->izq = aux;
+                aux = aux->der;
+            }
+            else
+            {
+                aux = aux->der->der;
+            }
+        }
+    }
+    this->imprimir();
+}
