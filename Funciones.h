@@ -10,13 +10,12 @@
 void iniciarSimulacion();
 void limpiarMemoria(Lista *);
 
-void simulacion(Proceso *, Lista *, int, int, int, NUM_CPUS);
+void simulacion(Proceso *, Lista *, int, int, int);
 
 int pedirTamMemoria();
 int pedirTamMax(int);
 int pedirCuanMax();
 int pedirCuanSistema();
-NUM_CPUS pedirProcesadores();
 int crearMemoria(int, Lista *);
 
 void iniciarSimulacion()
@@ -30,28 +29,14 @@ void iniciarSimulacion()
     int tamMax = pedirTamMax(ram);
     int cuanMax = pedirCuanMax();
     int cuanSistema = pedirCuanSistema();
-    NUM_CPUS cpus = pedirProcesadores();
 
     cout << "Iniciando simulacion..." << endl;
     Sleep(1.5);
 
-    simulacion(p, l, tamMax, cuanMax, cuanSistema, cpus);
-    limpiarMemoria(l);
-    l->imprimir();
+    simulacion(p, l, tamMax, cuanMax, cuanSistema);
 }
 
-void limpiarMemoria(Lista *l)
-{
-    Proceso *aux = l->getInicio();
-    while (aux != NULL)
-    {
-        aux->descargarProceso();
-        aux = aux->der;
-        l->juntarMemoria();
-    }
-}
-
-void simulacion(Proceso *p, Lista *l, int tamMax, int cuanMax, int cuanSistema, NUM_CPUS cpus)
+void simulacion(Proceso *p, Lista *l, int tamMax, int cuanMax, int cuanSistema)
 {
 
     /* Repite un ciclo desde 1 hasta el total de procesos. Llena el proceso con datos
@@ -73,6 +58,7 @@ void simulacion(Proceso *p, Lista *l, int tamMax, int cuanMax, int cuanSistema, 
             p = new Proceso(i, rand() % tamMax + 1, rand() % cuanMax + 1);
         }
 
+        cout << endl;
         cout << endl
              << "Proceso " << i << ":   " << imprimirProceso(p);
 
@@ -90,7 +76,13 @@ void simulacion(Proceso *p, Lista *l, int tamMax, int cuanMax, int cuanSistema, 
             system("pause");
         }
         // Parte de la ejecucion (Round Robin)
-        l->ejecucion(cpus, cuanSistema);
+        cout << endl
+             << "Lista RR: ";
+        l->imprimir_ListaListos();
+        l->ejecucion(cuanSistema);
+        cout << endl
+             << "Lista RR: ";
+        l->imprimir_ListaListos();
     }
 
     cout << endl
@@ -151,25 +143,11 @@ int pedirCuanSistema()
     // validar que no sea mayor a cuanMax
 }
 
-NUM_CPUS pedirProcesadores()
-{
-    int opc;
-    NUM_CPUS cpus;
-    cout << endl
-         << "Por ultimo, dame la cantidad de procesadores que ejecutaran la simulacion: \n1 / 2 / 4 / 8" << endl;
-    cin >> opc;
-    (opc == 1) ? cpus = CPU_1 : (opc == 2) ? cpus = CPU_2
-                            : (opc == 4)   ? cpus = CPU_4
-                            : (opc == 8)   ? cpus = CPU_8
-                                           : cpus = CPU_1;
-    return cpus;
-}
-
 int crearMemoria(int opc, Lista *l)
 {
     TAM_MEMORIA ram;
     /* Crea un proceso inicial el cual tiene como tarea almacenar el valor de
-la memoria RAM para luego en base a este generar las particiones de memoria*/
+    la memoria RAM para luego en base a este generar las particiones de memoria*/
     if (opc == 1)
     {
         l->nuevoProceso(new Proceso(0, TAM_1Mb, 0));
