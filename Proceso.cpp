@@ -77,6 +77,14 @@ string imprimirProceso(Proceso *p)
     return aux;
 }
 
+string imprimirProceso(Proceso *p, int minus)
+{
+    int n = p->cuanto;
+    (n - minus < 0) ? n = 0 : n -=minus;
+    string aux = "[" + to_string(p->id) + "," + to_string(p->tamanio) + "," + to_string(n) + "]";
+    return aux;
+
+}
 void descargarProceso(Proceso *p)
 {
     p->id=0;

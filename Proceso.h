@@ -24,8 +24,6 @@ public:
     Proceso *liga;
     Proceso(int = 0, int = 0, int = 0);
 
-    void descargarProceso();
-
     // setters
     void setId(int);
     void setTamanio(int);
@@ -43,6 +41,7 @@ public:
 
     // Imprimir datos de un proceso
     friend string imprimirProceso(Proceso *);
+    friend string imprimirProceso(Proceso *, int);
 
     //Descargar proceso 
     friend void descargarProceso(Proceso *); 

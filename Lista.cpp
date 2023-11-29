@@ -132,7 +132,7 @@ void Lista::ejecucion(const int cuanMax)
     {
         cout << endl
              << NEGRITA << VERDE << "El proceso " << imprimirProceso(inicioRR) << " esta siendo ejecutado en el procesador... "<<endl;
-        cout<<"El proceso "<< imprimirProceso(inicioRR) << " ha salido del procesador" <<endl;
+        cout<<"El proceso "<< imprimirProceso(inicioRR,cuanMax) << " ha salido del procesador" <<endl;
         if (inicioRR->cuanto - cuanMax <= 0)
         {
             inicioRR->cuanto = 0;
@@ -144,11 +144,11 @@ void Lista::ejecucion(const int cuanMax)
             cout<<endl;
             descargarProceso(q);
             cout<<endl;
+            this->juntarMemoria(); 
             this->imprimir();
 
             cout<<endl;
 
-            this->juntarMemoria(); 
             
         }
         else

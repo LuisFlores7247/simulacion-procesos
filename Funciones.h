@@ -52,7 +52,7 @@ void simulacion(Proceso *p, Lista *l, int tamMax, int cuanMax, int cuanSistema)
                              // ENMEMORIA, significa que puede seguir creando procesos ya que todos estan en memoria
                              // en caso de que este ENESPERA, significa que existe un proceso en espera por lo cual no se debe generar procesos
 
-    for (int i = 1; i <= 1000; i++)
+    for (int i = 1; i <= 100; i++)
     {
         system("cls");
 
@@ -96,7 +96,9 @@ void simulacion(Proceso *p, Lista *l, int tamMax, int cuanMax, int cuanSistema)
 
         cout<<RESET;
 
-         cout<<endl<<endl; system("pause");
+        cout<<endl<<endl;
+        // Sleep(1000);
+        system("pause");
     }
 
    
