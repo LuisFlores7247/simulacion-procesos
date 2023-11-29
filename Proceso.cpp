@@ -77,14 +77,10 @@ string imprimirProceso(Proceso *p)
     return aux;
 }
 
-// Llenar proceso nuevo con datos aleatorios dentro de los parametros establecidos
-Proceso *llenarProceso(int ide, int tamMax, int maxCuantos)
+void descargarProceso(Proceso *p)
 {
-
-    Proceso *aux = new Proceso();
-    aux->id = ide;
-    aux->tamanio = 1 + rand() % (tamMax - 1 + 1);
-    aux->cuanto = 1 + rand() % (maxCuantos - 1 + 1);
-
-    return aux;
+    p->id=0;
+    p->tamanio=p->mem_asignada;
+    p->cuanto=0;
+    p->status=HUECO;
 }

@@ -41,11 +41,11 @@ public:
     // Sobrecarga de operadores
     Proceso &operator=(const Proceso &);
 
-    // Llenar proceso aleatoriamente
-    friend Proceso *llenarProceso(int, int, int);
-
     // Imprimir datos de un proceso
     friend string imprimirProceso(Proceso *);
+
+    //Descargar proceso 
+    friend void descargarProceso(Proceso *); 
 
     // Round Robin
 };

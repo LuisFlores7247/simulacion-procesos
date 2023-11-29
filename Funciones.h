@@ -6,6 +6,7 @@
 #include "Lista.cpp"
 #include "cstdlib"
 #include "windows.h"
+#include "colores.h"
 
 void iniciarSimulacion();
 void limpiarMemoria(Lista *);
@@ -51,16 +52,21 @@ void simulacion(Proceso *p, Lista *l, int tamMax, int cuanMax, int cuanSistema)
                              // ENMEMORIA, significa que puede seguir creando procesos ya que todos estan en memoria
                              // en caso de que este ENESPERA, significa que existe un proceso en espera por lo cual no se debe generar procesos
 
-    for (int i = 1; i <= 10; i++)
+    for (int i = 1; i <= 1000; i++)
     {
+        system("cls");
+
+        cout<<NEGRITA;
+
         if (band == ENMEMORIA)
         {
             p = new Proceso(i, rand() % tamMax + 1, rand() % cuanMax + 1);
         }
 
-        cout << endl;
-        cout << endl
-             << "Proceso " << i << ":   " << imprimirProceso(p);
+        cout << endl << endl;
+        cout << endl <<
+             AMARILLO<< "Proceso " << i << ":   " << imprimirProceso(p) << RESET;
+        cout<<endl;
 
         band = p->status = l->asignMemoria(p);
         if (p->status == ENMEMORIA)
@@ -73,22 +79,29 @@ void simulacion(Proceso *p, Lista *l, int tamMax, int cuanMax, int cuanSistema)
             cout << endl
                  << "En espera, espacio no disponible...";
             cout << endl;
-            system("pause");
         }
         // Parte de la ejecucion (Round Robin)
-        cout << endl
-             << "Lista RR: ";
+        cout << endl << endl
+             << AZUL<< "Lista RR: ";
         l->imprimir_ListaListos();
+        cout << endl << RESET;
         l->ejecucion(cuanSistema);
         cout << endl
-             << "Lista RR: ";
+            << AZUL << "Lista RR: ";
         l->imprimir_ListaListos();
+
+        if(band==ENESPERA){
+            i--;
+        }
+
+        cout<<RESET;
+
+         cout<<endl<<endl; system("pause");
     }
 
-    cout << endl
-         << endl
-         << "Lista de listos..." << endl;
-    l->imprimir_ListaListos();
+   
+
+    
 }
 
 int pedirTamMemoria()

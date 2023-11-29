@@ -1,5 +1,6 @@
 #include <iostream>
 #include "Lista.h"
+#include "colores.h"
 
 using namespace std;
 
@@ -111,7 +112,7 @@ void Lista::imprimir()
     {
         Proceso *aux = inicio;
         while (aux != NULL)
-        {
+        {   
             aux->status == HUECO ? cout << "[" << aux->id << "," << aux->tamanio << "," << aux->cuanto << "]"
                                  : cout << "[" << aux->id << "," << aux->tamanio << "(" << aux->mem_asignada << ")," << aux->cuanto << "]";
 
@@ -126,22 +127,35 @@ void Lista::ejecucion(const int cuanMax)
 {
     // Funcion que ejecuta el proceso colocado en el inicio de la lista de RR, asi como acomodandola dependiendo de como quede el proceso despues de su ejecucion
     Proceso *q;
+ 
     if (inicioRR != NULL)
     {
         cout << endl
-             << "El proceso " << imprimirProceso(inicioRR) << " esta siendo ejecutado en el procesador: ";
+             << NEGRITA << VERDE << "El proceso " << imprimirProceso(inicioRR) << " esta siendo ejecutado en el procesador... "<<endl;
+        cout<<"El proceso "<< imprimirProceso(inicioRR) << " ha salido del procesador" <<endl;
         if (inicioRR->cuanto - cuanMax <= 0)
         {
             inicioRR->cuanto = 0;
             cout << endl
-                 << "El proceso termino su ejecucion, descargando de memoria...";
+                 << MAGENTA << "El proceso termino su ejecucion !!!, descargando de memoria..." << RESET << RESET;
             q = inicioRR;
             inicioRR = inicioRR->liga;
             // Poner aqui funcion que descargue el proceso de memoria y condense la memoria si es posible
-            // descargarProceso(q);
+            cout<<endl;
+            descargarProceso(q);
+            cout<<endl;
+            this->imprimir();
+
+            cout<<endl;
+
+            this->juntarMemoria(); 
+            
         }
         else
-        {
+        {   
+            cout<<endl<<RESET;
+            this->imprimir();
+            cout<<endl;
             inicioRR->cuanto -= cuanMax;
             finRR->liga = inicioRR;
             inicioRR = inicioRR->liga;
@@ -177,27 +191,69 @@ void Lista::juntarMemoria()
 {
     // Funcion que recorre la lista de procesos y junta los huecos que se encuentren
     Proceso *aux = inicio;
-    while (aux != NULL)
-    {
-        if (aux->der->tamanio < aux->tamanio)
-        {
+    Proceso *q=NULL;
+
+    int tamAux;
+    int tamAuxDer;
+
+    while (aux->der != NULL)
+    {   
+
+        if (aux->status!=HUECO){
+            tamAux=aux->mem_asignada;
+        }
+        else{
+            tamAux=aux->tamanio;
+        }
+
+        if(aux->der->status!=HUECO){
+            tamAuxDer=aux->der->mem_asignada;
+        }
+        else{
+            tamAuxDer=aux->der->tamanio;
+        }
+
+        if(tamAuxDer < tamAux){
             aux = aux->der;
         }
         else
         {
-            if (aux->status == HUECO && aux->der->status == HUECO && aux->tamanio == aux->der->tamanio)
+            if (aux->status == HUECO && aux->der->status == HUECO && tamAux == tamAuxDer)
             {
-
                 aux->tamanio += aux->der->tamanio;
-                aux->der = aux->der->der;
-                aux->der->izq = aux;
-                aux = aux->der;
+                q=aux->der;
+
+                if(aux->der->der==NULL){
+                    aux->der=NULL;
+                    fin=aux;
+
+                    return;
+                }
+                else{
+                    aux->der->der->izq = aux;
+                    aux->der = aux->der->der;
+                }
+                
+                delete(q);
+                cout<<endl<<endl;
+                cout<<ROJO<<"Uniendo buddys"<<endl<<endl<<RESET;
+                this->imprimir();  
+                cout<<endl;
+
             }
+
             else
             {
-                aux = aux->der->der;
+                if(aux->der->der==NULL){
+                    return;
+                }
+                else{
+                    aux = aux->der->der;
+                }
+                
             }
         }
     }
-    this->imprimir();
+
 }
+   
