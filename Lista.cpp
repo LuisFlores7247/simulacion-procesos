@@ -3,6 +3,7 @@
 
 using namespace std;
 
+
 // Constructor de la clase Lista
 Lista::Lista()
 {
@@ -66,21 +67,6 @@ void Lista::nuevoProceso(Proceso *aux)
 
 }
 
-void Lista::particionar(Proceso *_proceso)
-{
-    Proceso *aux = inicio;
-
-    while (aux != NULL)
-    {
-        if (aux->status == HUECO && aux->tamanio >= (_proceso->tamanio * 2) && aux->tamanio > 32)
-        {
-            // this->nuevoProceso(0, aux->tamanio / 2, 0);
-            aux->tamanio /= 2;
-        }
-        aux = aux->izq;
-    }
-}
-
 STATUS Lista::asignMemoria(Proceso *_proceso)
 {
     Proceso *aux = inicio;
@@ -127,20 +113,6 @@ STATUS Lista::asignMemoria(Proceso *_proceso)
     return ENESPERA;
 }
 
-Proceso Lista::hayEspacio(Proceso *_proceso)
-{
-    Proceso *aux = inicio;
-    Proceso p;
-    while (aux != NULL)
-    {
-        if (aux->status == HUECO && (aux->tamanio / 2))
-        {
-            p = *aux;
-            return p;
-        }
-        aux = aux->der;
-    }
-}
 
 void Lista::agregarAlistaRR(Proceso* aux)
 {
@@ -162,7 +134,6 @@ void Lista::agregarAlistaRR(Proceso* aux)
 
 void Lista::imprimir()
 {
-    cout << endl;
     if (inicio == NULL)
     {
         cout << "Lista Vacia..." << endl;
@@ -178,55 +149,43 @@ void Lista::imprimir()
             aux = aux->der;
         }
     }
-    cout << endl;
 }
 
 //Metodos para el correcto funcionamiento de Round Robin
 
-
-void Lista::ejecucion(const NUM_CPUS aux, const int cuanMax)
+void Lista::ejecucion(const int cuanMax)
 {
-    //Funcion que, dependiendo de la cantidad de procesadores que se establecieron, se ejecutan x cantidad de procesos restando los cuantos del sistema a los 
-    //cuantos necesarios para su ejecucion
-    Proceso *q = inicioRR, *p = finRR;
-    bool band = true;
-    for (int i = 0; i < aux; i++)   //Este ciclo se repite la cantidad de procesadores que se tiene
+    //Funcion que ejecuta el proceso colocado en el inicio de la lista de RR, asi como acomodandola dependiendo de como quede el proceso despues de su ejecucion
+    Proceso *q;
+    if (inicioRR != NULL)
     {
-        if (band)
+        cout << endl << "El proceso " << imprimirProceso(inicioRR) << " esta siendo ejecutado en el procesador: ";
+        if (inicioRR->cuanto - cuanMax <= 0)
         {
-            if (q == p)
-                band = false;
-            
-            cout << endl << "El proceso " << imprimirProceso(q) << " esta siendo ejecutado en el procesador: " << i+1;
-            if (q->cuanto - cuanMax < 0)    //Los cuantos del proceso se acaban despues de esta ejecucion
-            {
-                q->cuanto = 0;
-                cout << endl << "El proceso termino su ejecucion, descargando de memoria...";
-                //Poner aqui funcion que descargue el proceso de memoria y condense la memoria si es posible
-                q = q->liga;
-            }
-            else    //El proceso no acabo su ejecucion en esta vuelta, se va al final de la cola de RR, se recorre la cola
-            {
-                q->cuanto -= cuanMax;
-                finRR->liga = q;
-                inicioRR = q->liga;
-                finRR = q;
-                q = q->liga;
-                finRR->liga = NULL;
-            }
-            
+            inicioRR->cuanto = 0;
+            cout << endl << "El proceso termino su ejecucion, descargando de memoria...";
+            q = inicioRR;
+            inicioRR = inicioRR->liga;
+            //Poner aqui funcion que descargue el proceso de memoria y condense la memoria si es posible
+            //descargarProceso(q);
         }
         else
         {
-            cout << endl << "El procesador " << i+1 << "No contiene ningun proceso, no hay procesos necesarios a ejecutar";
+            inicioRR->cuanto -= cuanMax;
+            finRR->liga = inicioRR;
+            inicioRR = inicioRR->liga;
+            finRR = finRR->liga;
+            finRR->liga = NULL;
         }
     }
-    
+    else
+    {
+        cout << endl << "El procesador no contiene ningun proceso, no hay procesos necesarios a ejecutar";
+    }
 }
 
 void Lista::imprimir_ListaListos()
 {
-    cout << endl;
     if (inicioRR == NULL)
     {
         cout << "Lista Vacia..." << endl;
@@ -236,20 +195,8 @@ void Lista::imprimir_ListaListos()
         Proceso *aux = inicioRR;
         while (aux != NULL)
         {
-            imprimirProceso(aux);
+            cout << imprimirProceso(aux);
             aux = aux->liga;
         }
     }
-    cout << endl;
-}
-
-void Lista::descargandoProceso()
-{
-    //El proceso que se va a descargar SIEMPRE sera el de InicioRR
-    //No voy a tocar nada de la memoria ni buddy sistem
-    inicioRR->id = 0;
-    inicioRR->mem_asignada = 0;
-    inicioRR->tamanio = 0;
-    inicioRR = inicioRR->liga;
-
 }

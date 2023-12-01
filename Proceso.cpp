@@ -1,6 +1,7 @@
 #include "Proceso.h"
 #include <iostream>
 using namespace std;
+
 // Constructor de la clase Proceso
 Proceso::Proceso(int _id, int _tamanio, int _cuanto)
     : id(_id), tamanio(_tamanio), cuanto(_cuanto), mem_asignada(0), izq(NULL), der(NULL), liga(NULL)
@@ -63,8 +64,6 @@ Proceso &Proceso::operator=(const Proceso &_proceso)
         this->cuanto = _proceso.cuanto;
         this->mem_asignada = _proceso.mem_asignada;
         this->status = _proceso.status;
-        // this->izq = _proceso.izq;
-        // this->der = _proceso.der;
     }
     return *this;
 }
@@ -73,7 +72,6 @@ Proceso &Proceso::operator=(const Proceso &_proceso)
 
 string imprimirProceso(Proceso *p){
     string aux = "[" + to_string(p->id) + "," + to_string(p->tamanio) + "," + to_string(p->cuanto) + "]";
-    // cout<<"["<<p->id<<","<<p->tamanio<<","<<p->cuanto<<"]";
     return aux;
 }
 
@@ -81,8 +79,6 @@ string imprimirProceso(Proceso *p){
 Proceso *llenarProceso(int ide, int tamMax, int maxCuantos){
 
     Proceso *aux=new Proceso();
-
-
     aux->id=ide;
     aux->tamanio=1+rand()%(tamMax-1+1);
     aux->cuanto=1+rand()%(maxCuantos-1+1);

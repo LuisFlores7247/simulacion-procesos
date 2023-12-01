@@ -4,6 +4,7 @@
 #include <cctype>
 using namespace std;
 
+
 enum STATUS
 {
     HUECO = 0,

@@ -4,20 +4,14 @@
 #include "Proceso.cpp"
 
 
+
 enum TAM_MEMORIA
 {
     TAM_1Mb = 1024,
     TAM_4Mb = 4096,
     TAM_8Mb = 8192
 };
-enum NUM_CPUS
-{
-    CPU_0 = 0,
-    CPU_1 = 1,
-    CPU_2 = 2,
-    CPU_4 = 4,
-    CPU_8 = 8
-};
+//Enum CPUS no necesario por el momento
 
 class Lista
 {
@@ -38,9 +32,9 @@ public:
 
     // Metodos de la clase Lista
     void nuevoProceso(Proceso *);
-    void particionar(Proceso *);
+    // void particionar(Proceso *);
     STATUS asignMemoria(Proceso *);
-    Proceso hayEspacio(Proceso *);
+    // Proceso hayEspacio(Proceso *);
 
     void agregarAlistaRR(Proceso*);
 
@@ -50,8 +44,8 @@ public:
     void imprimir_ListaListos();
 
     //Round Robin
-    void ejecucion(const NUM_CPUS, const int);
-    void descargandoProceso();
+    void ejecucion(const int);
+    // void descargandoProceso(); que esta funcion mandes el proceso a descargar como parametro de preferencia
 
 private:
     Proceso *inicio;

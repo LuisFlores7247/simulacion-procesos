@@ -7,15 +7,15 @@
 #include "cstdlib"
 #include "windows.h"
 
+
 void iniciarSimulacion();
 
-void simulacion(Proceso *, Lista *, int, int, int, NUM_CPUS);
+void simulacion(Proceso *, Lista *, int, int,int);
 
 int pedirTamMemoria();
 int pedirTamMax(int);
 int pedirCuanMax();
 int pedirCuanSistema(int);
-NUM_CPUS pedirProcesadores();
 int crearMemoria(int, Lista *);
 
 void iniciarSimulacion()
@@ -29,15 +29,14 @@ void iniciarSimulacion()
     int tamMax = pedirTamMax(ram);
     int cuanMax = pedirCuanMax();
     int cuanSistema = pedirCuanSistema(cuanMax);
-    NUM_CPUS cpus = pedirProcesadores();
 
     cout << "Iniciando simulacion..." << endl;
     Sleep(1.5);
 
-    simulacion(p, l, tamMax, cuanMax, cuanSistema, cpus);
+    simulacion(p, l, tamMax, cuanMax,cuanSistema);
 }
 
-void simulacion(Proceso *p, Lista *l, int tamMax, int cuanMax, int cuanSistema, NUM_CPUS cpus)
+void simulacion(Proceso *p, Lista *l, int tamMax, int cuanMax, int cuanSistema)
 {
 
     /* Repite un ciclo desde 1 hasta el total de procesos. Llena el proceso con datos
@@ -58,14 +57,13 @@ void simulacion(Proceso *p, Lista *l, int tamMax, int cuanMax, int cuanSistema, 
         {
             p = llenarProceso(i, tamMax, cuanMax);
         }
-
-        cout << endl
-             << "Proceso " << i << ":   " << imprimirProceso(p);
-
+        
+        cout << endl;
+        cout<<endl<<"Proceso "<<i<<":   " << imprimirProceso(p); 
+        
         band = p->status = l->asignMemoria(p);
-        if (p->status == ENMEMORIA)
-        {
-            cout << endl;
+        if(p->status==ENMEMORIA){  
+            cout << endl << "RAM: ";    
             l->imprimir();
         }
         else
@@ -75,8 +73,13 @@ void simulacion(Proceso *p, Lista *l, int tamMax, int cuanMax, int cuanSistema, 
             cout << endl;
             system("pause");
         }
-        // Parte de la ejecucion (Round Robin)
-        l->ejecucion(cpus, cuanSistema);
+        //Parte de la ejecucion (Round Robin)
+        cout << endl << "Lista RR: ";
+        l->imprimir_ListaListos();
+        l->ejecucion(cuanSistema);
+        cout << endl << "Lista RR: ";
+        l->imprimir_ListaListos();
+
     }
 
     cout << endl
@@ -131,7 +134,8 @@ int pedirTamMax(int ram)
 
         if (tamMax > ram / 2)
         {
-            cout << "Opcio invalida. Introduce un valor menor";
+            cout << "Opcio invalida. Introduce un valor menor" << endl;
+            system("pause");
         }
 
     } while (tamMax > ram / 2);
@@ -159,7 +163,8 @@ int pedirCuanSistema(int cuanMax)
         if (cuanSistema > cuanMax || cuanSistema <= 0)
         {
             cout << endl
-                 << "Cantidad de cuantos de procesamiento invalida!!!";
+                 << "Cantidad de cuantos de procesamiento invalida!!!" <<endl;
+            system("pause");
             check = true;
         }
         else
@@ -172,66 +177,33 @@ int pedirCuanSistema(int cuanMax)
     // validar que no sea mayor a cuanMax
 }
 
-NUM_CPUS pedirProcesadores()
-{
-    int opc;
-    bool check = false;
-    NUM_CPUS cpus;
-    do
-    {
-        system("cls");
-        cout << endl
-             << "Por ultimo, dame la cantidad de procesadores que ejecutaran la simulacion: \n1 / 2 / 4 / 8" << endl;
-        cin >> opc;
-        if (opc < 1 || opc > 8)
-        {
-            cout << endl
-                 << "No. de Procesadores Invalido...";
-            check = true;
-        }
-        else
-        {
-            (opc == 1) ? cpus = CPU_1 : (opc == 2) ? cpus = CPU_2
-                                    : (opc == 4)   ? cpus = CPU_4
-                                    : (opc == 8)   ? cpus = CPU_8
-                                                   : CPU_0;
-            if (cpus == CPU_0)
-            {
-                cout << endl
-                     << "No. de Procesadores Invalido...";
-                check = true;
-            }
-            else
-            {
-                check = false;
-            }
-        }
-    } while (check == true);
-    return cpus;
-}
-
 int crearMemoria(int opc, Lista *l)
 {
     TAM_MEMORIA ram;
     /* Crea un proceso inicial el cual tiene como tarea almacenar el valor de
-la memoria RAM para luego en base a este generar las particiones de memoria*/
-    if (opc == 1)
-    {
-        l->nuevoProceso(new Proceso(0, TAM_1Mb, 0));
-        ram = TAM_1Mb;
-    }
+    la memoria RAM para luego en base a este generar las particiones de memoria*/
+    do{
+        if (opc == 1)
+        {
+            l->nuevoProceso(new Proceso(0, TAM_1Mb, 0));
+            ram = TAM_1Mb;
+        }
 
-    else if (opc == 2)
-    {
-        l->nuevoProceso(new Proceso(0, TAM_4Mb, 0));
-        ram = TAM_4Mb;
-    }
-    else if (opc == 3)
-    {
+        else if (opc == 2)
+        {
+            l->nuevoProceso(new Proceso(0, TAM_4Mb, 0));
+            ram = TAM_4Mb;
+        }
+        else if (opc == 3)
+        {
 
-        l->nuevoProceso(new Proceso(0, TAM_8Mb, 0));
-        ram = TAM_8Mb;
-    }
+            l->nuevoProceso(new Proceso(0, TAM_8Mb, 0));
+            ram = TAM_8Mb;
+        }
+        else{
+            cout << endl << "Opcion invalida....";
+        }
+    }while(opc<1 || opc>3);
     return ram;
 }
 
