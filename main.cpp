@@ -1,8 +1,20 @@
-#include <iostream>
-#include "Lista.cpp"
+#include "Funciones.h"
 
 using namespace std;
 
+int main()
+{
+    srand(time(NULL));
+
+    system("cls");
+
+    iniciarSimulacion();
+
+    return 0;
+}
+
+// Estructura aproximada del main como tal
+/*
 int main(int argc, char const *argv[])
 {
     Lista *l = new Lista();
@@ -15,3 +27,4 @@ int main(int argc, char const *argv[])
     delete l;
     return 0;
 }
+*/
