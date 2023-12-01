@@ -41,7 +41,6 @@ public:
     Proceso &operator=(const Proceso &);
 
     //Llenar proceso aleatoriamente
-    friend Proceso *llenarProceso(int, int, int);
 
     //Imprimir datos de un proceso
     friend string imprimirProceso(Proceso *p);
