@@ -4,7 +4,6 @@
 #include <cctype>
 using namespace std;
 
-
 enum STATUS
 {
     HUECO = 0,
@@ -41,15 +40,14 @@ public:
     // Sobrecarga de operadores
     Proceso &operator=(const Proceso &);
 
-    //Llenar proceso aleatoriamente
-    friend Proceso *llenarProceso(int, int, int);
+    // Imprimir datos de un proceso
+    friend string imprimirProceso(Proceso *);
+    friend string imprimirProceso(Proceso *, int);
 
-    //Imprimir datos de un proceso
-    friend string imprimirProceso(Proceso *p);
+    //Descargar proceso 
+    friend void descargarProceso(Proceso *); 
 
-    //Round Robin
-
-    
+    // Round Robin
 };
 
 #endif

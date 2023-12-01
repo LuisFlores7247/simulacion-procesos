@@ -6,11 +6,12 @@
 #include "Lista.cpp"
 #include "cstdlib"
 #include "windows.h"
-
+#include "colores.h"
 
 void iniciarSimulacion();
+void limpiarMemoria(Lista *);
 
-void simulacion(Proceso *, Lista *, int, int,int);
+void simulacion(Proceso *, Lista *, int, int, int);
 
 int pedirTamMemoria();
 int pedirTamMax(int);
@@ -33,7 +34,7 @@ void iniciarSimulacion()
     cout << "Iniciando simulacion..." << endl;
     Sleep(1.5);
 
-    simulacion(p, l, tamMax, cuanMax,cuanSistema);
+    simulacion(p, l, tamMax, cuanMax, cuanSistema);
 }
 
 void simulacion(Proceso *p, Lista *l, int tamMax, int cuanMax, int cuanSistema)
@@ -51,41 +52,51 @@ void simulacion(Proceso *p, Lista *l, int tamMax, int cuanMax, int cuanSistema)
                              // ENMEMORIA, significa que puede seguir creando procesos ya que todos estan en memoria
                              // en caso de que este ENESPERA, significa que existe un proceso en espera por lo cual no se debe generar procesos
 
-    for (int i = 1; i <= 5; i++)
-    {
+    for(int i=1; i<=5; i++){
         if (band == ENMEMORIA)
         {
-            p = llenarProceso(i, tamMax, cuanMax);
+            p = new Proceso(i, rand() % tamMax + 1, rand() % cuanMax + 1);
         }
-        
-        cout << endl;
-        cout<<endl<<"Proceso "<<i<<":   " << imprimirProceso(p); 
-        
+
+        cout << endl << endl;
+        cout << endl <<
+             AMARILLO<< "Proceso " << i << ":   " << imprimirProceso(p) << RESET;
+        cout<<endl;
+
         band = p->status = l->asignMemoria(p);
-        if(p->status==ENMEMORIA){  
-            cout << endl << "RAM: ";    
+        if (p->status == ENMEMORIA)
+        {
+            cout << endl;
             l->imprimir();
         }
-        else
-        {
-            cout << endl
-                 << "En espera, espacio no disponible...";
-            cout << endl;
-            system("pause");
+        else{
+            cout<<endl<<"En espera, espacio no disponible...";
+            cout<<endl; system("pause");
         }
-        //Parte de la ejecucion (Round Robin)
-        cout << endl << "Lista RR: ";
+        // Parte de la ejecucion (Round Robin)
+        cout << endl << endl
+             << AZUL<< "Lista RR: ";
         l->imprimir_ListaListos();
+        cout << endl << RESET;
         l->ejecucion(cuanSistema);
-        cout << endl << "Lista RR: ";
+        cout << endl
+            << AZUL << "Lista RR: ";
         l->imprimir_ListaListos();
 
+        if(band==ENESPERA){
+            i--;
+        }
+
+        cout<<RESET;
+
+        cout<<endl<<endl;
+        // Sleep(1000);
+        system("pause");
     }
 
-    cout << endl
-         << endl
-         << "Lista de listos..." << endl;
-    l->imprimir_ListaListos();
+   
+
+    
 }
 
 int pedirTamMemoria()
@@ -152,27 +163,8 @@ int pedirCuanMax()
 int pedirCuanSistema(int cuanMax)
 {
     int cuanSistema;
-    bool check = false;
-    do
-    {
-        system("cls");
-        cout << endl
-             << "Ingresa los cuantos del sistema: ";
-        cin >> cuanSistema;
-
-        if (cuanSistema > cuanMax || cuanSistema <= 0)
-        {
-            cout << endl
-                 << "Cantidad de cuantos de procesamiento invalida!!!" <<endl;
-            system("pause");
-            check = true;
-        }
-        else
-        {
-            check = false;
-        }
-
-    } while (check == true);
+    cout << "Ingresa los cuantos del sistema: ";
+    cin >>cuanSistema;
     return cuanSistema;
     // validar que no sea mayor a cuanMax
 }
