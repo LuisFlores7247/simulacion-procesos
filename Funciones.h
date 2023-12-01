@@ -163,10 +163,20 @@ int pedirCuanMax()
 int pedirCuanSistema(int cuanMax)
 {
     int cuanSistema;
-    cout << "Ingresa los cuantos del sistema: ";
-    cin >>cuanSistema;
+    do{
+        system("cls");
+        cout << "Ingresa los cuantos del sistema: ";
+        cin >>cuanSistema;
+        if(cuanSistema>=cuanMax || cuanSistema<1){
+            cout << endl << "Cuantos del sistema invalidos..." << endl;
+            system("pause");
+        }
+
+    }while(cuanSistema>=cuanMax || cuanSistema<1);
+    
+
     return cuanSistema;
-    // validar que no sea mayor a cuanMax
+
 }
 
 int crearMemoria(int opc, Lista *l)
