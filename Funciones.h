@@ -7,6 +7,9 @@
 #include "cstdlib"
 #include "windows.h"
 #include "colores.h"
+#include "conio.h"
+#include <sys/time.h>
+#include <math.h>
 
 void iniciarSimulacion();
 void limpiarMemoria(Lista *);
@@ -18,6 +21,8 @@ int pedirTamMax(int);
 int pedirCuanMax();
 int pedirCuanSistema();
 int crearMemoria(int, Lista *);
+
+long obtenerTiempo();
 
 void iniciarSimulacion()
 {
@@ -52,21 +57,25 @@ void simulacion(Proceso *p, Lista *l, int tamMax, int cuanMax, int cuanSistema)
                              // ENMEMORIA, significa que puede seguir creando procesos ya que todos estan en memoria
                              // en caso de que este ENESPERA, significa que existe un proceso en espera por lo cual no se debe generar procesos
 
-    for (int i = 1; i <= 100; i++)
+    int i = 1;
+    long inicio = obtenerTiempo();
+    while (true)
     {
         system("cls");
+        cout << ROJO << "Para Terminar la simulacion presiona ENTER" << endl;
 
-        cout<<NEGRITA;
+        cout << NEGRITA;
 
         if (band == ENMEMORIA)
         {
             p = new Proceso(i, rand() % tamMax + 1, rand() % cuanMax + 1);
         }
 
-        cout << endl << endl;
-        cout << endl <<
-             AMARILLO<< "Proceso " << i << ":   " << imprimirProceso(p) << RESET;
-        cout<<endl;
+        cout << endl
+             << endl;
+        cout << endl
+             << AMARILLO << "Proceso " << i << ":   " << imprimirProceso(p) << RESET;
+        cout << endl;
 
         band = p->status = l->asignMemoria(p);
         if (p->status == ENMEMORIA)
@@ -81,29 +90,41 @@ void simulacion(Proceso *p, Lista *l, int tamMax, int cuanMax, int cuanSistema)
             cout << endl;
         }
         // Parte de la ejecucion (Round Robin)
-        cout << endl << endl
-             << AZUL<< "Lista RR: ";
+        cout << endl
+             << endl
+             << AZUL << "Lista RR: ";
         l->imprimir_ListaListos();
-        cout << endl << RESET;
+        cout << endl
+             << RESET;
         l->ejecucion(cuanSistema);
         cout << endl
-            << AZUL << "Lista RR: ";
+             << AZUL << "Lista RR: ";
         l->imprimir_ListaListos();
 
-        if(band==ENESPERA){
+        if (band == ENESPERA)
+        {
             i--;
         }
 
-        cout<<RESET;
+        cout << RESET;
 
-        cout<<endl<<endl;
+        cout << endl
+             << endl;
         // Sleep(1000);
-        system("pause");
+        if (_kbhit())
+        {
+            char tecla = _getch();
+            if (tecla == '\r')
+            {
+                break;
+            }
+        }
+        i++;
     }
-
-   
-
-    
+    long fin = obtenerTiempo();
+    system("cls");
+    long tiempoEjecucion = ((fin - inicio) / 1000);
+    cout << "Tiempo de ejecucion: " << tiempoEjecucion << " segundos" << endl;
 }
 
 int pedirTamMemoria()
@@ -181,6 +202,13 @@ int crearMemoria(int opc, Lista *l)
         ram = TAM_8Mb;
     }
     return ram;
+}
+
+long obtenerTiempo()
+{
+    struct timeval inicio;
+    gettimeofday(&inicio, NULL);
+    return inicio.tv_sec * 1000 + inicio.tv_usec / 1000;
 }
 
 #endif
