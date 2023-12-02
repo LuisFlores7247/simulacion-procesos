@@ -3,10 +3,11 @@
 
 #include <iostream>
 #include <ctime>
-#include "Lista.cpp"
-#include "cstdlib"
-#include "windows.h"
+#include <cstdlib>
+#include <windows.h>
+#include <iomanip>
 #include "colores.h"
+#include "Lista.cpp"
 #include "conio.h"
 #include <sys/time.h>
 #include <math.h>
@@ -14,7 +15,7 @@
 void iniciarSimulacion();
 void limpiarMemoria(Lista *);
 
-void simulacion(Proceso *, Lista *, int, int, int);
+void simulacion(Proceso *, Lista *, int, int, int, int);
 
 int pedirTamMemoria();
 int pedirTamMax(int);
@@ -39,10 +40,10 @@ void iniciarSimulacion()
     cout << "Iniciando simulacion..." << endl;
     Sleep(1.5);
 
-    simulacion(p, l, tamMax, cuanMax, cuanSistema);
+    simulacion(p, l, tamMax, cuanMax, cuanSistema, ram);
 }
 
-void simulacion(Proceso *p, Lista *l, int tamMax, int cuanMax, int cuanSistema)
+void simulacion(Proceso *p, Lista *l, int tamMax, int cuanMax, int cuanSistema, int ram)
 {
 
     /* Repite un ciclo desde 1 hasta el total de procesos. Llena el proceso con datos
@@ -78,17 +79,16 @@ void simulacion(Proceso *p, Lista *l, int tamMax, int cuanMax, int cuanSistema)
         cout << endl;
 
         band = p->status = l->asignMemoria(p);
-        if (p->status == ENMEMORIA)
-        {
-            cout << endl;
-            l->imprimir();
-        }
-        else
+
+        if (p->status == ENESPERA)
         {
             cout << endl
                  << "En espera, espacio no disponible...";
             cout << endl;
         }
+        cout << endl;
+        l->imprimir();
+        cout << endl << endl << CYAN << "El porcentaje de RAM es: " << setprecision(2) << fixed << (l->porcentajeMem(ram) * 100) << "%";
         // Parte de la ejecucion (Round Robin)
         cout << endl
              << endl
@@ -97,8 +97,10 @@ void simulacion(Proceso *p, Lista *l, int tamMax, int cuanMax, int cuanSistema)
         cout << endl
              << RESET;
         l->ejecucion(cuanSistema);
-        cout << endl
-             << AZUL << "Lista RR: ";
+        cout << endl << RESET;
+        l->imprimir();
+        cout << endl << endl << CYAN << "El porcentaje de RAM es: " << setprecision(2) << fixed << (l->porcentajeMem(ram) * 100) << "%";
+        cout << endl << endl << AZUL << "Lista RR: ";
         l->imprimir_ListaListos();
 
         if (band == ENESPERA)
