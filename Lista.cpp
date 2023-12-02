@@ -101,6 +101,22 @@ void Lista::agregarAlistaRR(Proceso *aux)
         finRR = aux;
     }
 }
+double Lista::porcentajeMem(const int tamRam)
+{
+    double suma = 0;
+    if (inicio != NULL)
+    {
+        Proceso *aux = inicio;
+        while (aux != NULL)
+        {
+            if (aux->status == ENMEMORIA)
+                suma += aux->mem_asignada;
+            aux = aux->der;
+        }        
+    }
+    return suma/tamRam;
+}
+
 
 void Lista::imprimir()
 {
@@ -144,18 +160,10 @@ void Lista::ejecucion(const int cuanMax)
             cout<<endl;
             descargarProceso(q);
             cout<<endl;
-            this->juntarMemoria(); 
-            this->imprimir();
-
-            cout<<endl;
-
-            
+            this->juntarMemoria();             
         }
         else
         {   
-            cout<<endl<<RESET;
-            this->imprimir();
-            cout<<endl;
             inicioRR->cuanto -= cuanMax;
             finRR->liga = inicioRR;
             inicioRR = inicioRR->liga;
@@ -236,7 +244,7 @@ void Lista::juntarMemoria()
                 
                 delete(q);
                 cout<<endl<<endl;
-                cout<<ROJO<<"Uniendo buddys"<<endl<<endl<<RESET;
+                cout<<ROJO<<"Uniendo buddys"<<endl;
                 this->imprimir();  
                 cout<<endl;
 
