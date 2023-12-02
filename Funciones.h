@@ -3,21 +3,27 @@
 
 #include <iostream>
 #include <ctime>
-#include "Lista.cpp"
-#include "cstdlib"
-#include "windows.h"
+#include <cstdlib>
+#include <windows.h>
+#include <iomanip>
 #include "colores.h"
+#include "Lista.cpp"
+#include "conio.h"
+#include <sys/time.h>
+#include <math.h>
 
 void iniciarSimulacion();
 void limpiarMemoria(Lista *);
 
-void simulacion(Proceso *, Lista *, int, int, int);
+void simulacion(Proceso *, Lista *, int, int, int, int);
 
 int pedirTamMemoria();
 int pedirTamMax(int);
 int pedirCuanMax();
 int pedirCuanSistema(int);
 int crearMemoria(int, Lista *);
+
+long obtenerTiempo();
 
 void iniciarSimulacion()
 {
@@ -34,10 +40,10 @@ void iniciarSimulacion()
     cout << "Iniciando simulacion..." << endl;
     Sleep(1.5);
 
-    simulacion(p, l, tamMax, cuanMax, cuanSistema);
+    simulacion(p, l, tamMax, cuanMax, cuanSistema, ram);
 }
 
-void simulacion(Proceso *p, Lista *l, int tamMax, int cuanMax, int cuanSistema)
+void simulacion(Proceso *p, Lista *l, int tamMax, int cuanMax, int cuanSistema, int ram)
 {
 
     /* Repite un ciclo desde 1 hasta el total de procesos. Llena el proceso con datos
@@ -52,51 +58,75 @@ void simulacion(Proceso *p, Lista *l, int tamMax, int cuanMax, int cuanSistema)
                              // ENMEMORIA, significa que puede seguir creando procesos ya que todos estan en memoria
                              // en caso de que este ENESPERA, significa que existe un proceso en espera por lo cual no se debe generar procesos
 
-    for(int i=1; i<=5; i++){
+    int i = 1;
+    long inicio = obtenerTiempo();
+    while (true)
+    {
+        system("cls");
+        cout << ROJO << "Para Terminar la simulacion presiona ENTER" << endl;
+
+        cout << NEGRITA;
+
         if (band == ENMEMORIA)
         {
             p = new Proceso(i, rand() % tamMax + 1, rand() % cuanMax + 1);
         }
 
-        cout << endl << endl;
-        cout << endl <<
-             AMARILLO<< "Proceso " << i << ":   " << imprimirProceso(p) << RESET;
-        cout<<endl;
+        cout << endl
+             << endl;
+        cout << endl
+             << AMARILLO << "Proceso " << i << ":   " << imprimirProceso(p) << RESET;
+        cout << endl;
 
         band = p->status = l->asignMemoria(p);
-        if (p->status == ENMEMORIA)
+
+        if (p->status == ENESPERA)
         {
+            cout << endl
+                 << "En espera, espacio no disponible...";
             cout << endl;
-            l->imprimir();
         }
-        else{
-            cout<<endl<<"En espera, espacio no disponible...";
-            cout<<endl; system("pause");
-        }
+        cout << endl;
+        l->imprimir();
+        cout << endl << endl << CYAN << "El porcentaje de RAM es: " << setprecision(2) << fixed << (l->porcentajeMem(ram) * 100) << "%";
         // Parte de la ejecucion (Round Robin)
-        cout << endl << endl
-             << AZUL<< "Lista RR: ";
-        l->imprimir_ListaListos();
-        cout << endl << RESET;
-        l->ejecucion(cuanSistema);
         cout << endl
-            << AZUL << "Lista RR: ";
+             << endl
+             << AZUL << "Lista RR: ";
+        l->imprimir_ListaListos();
+        cout << endl
+             << RESET;
+        l->ejecucion(cuanSistema);
+        cout << endl << RESET;
+        l->imprimir();
+        cout << endl << endl << CYAN << "El porcentaje de RAM es: " << setprecision(2) << fixed << (l->porcentajeMem(ram) * 100) << "%";
+        cout << endl << endl << AZUL << "Lista RR: ";
         l->imprimir_ListaListos();
 
-        if(band==ENESPERA){
+        if (band == ENESPERA)
+        {
             i--;
         }
 
-        cout<<RESET;
+        cout << RESET;
 
-        cout<<endl<<endl;
+        cout << endl
+             << endl;
         // Sleep(1000);
-        system("pause");
+        if (_kbhit())
+        {
+            char tecla = _getch();
+            if (tecla == '\r')
+            {
+                break;
+            }
+        }
+        i++;
     }
-
-   
-
-    
+    long fin = obtenerTiempo();
+    system("cls");
+    long tiempoEjecucion = ((fin - inicio) / 1000);
+    cout << "Tiempo de ejecucion: " << tiempoEjecucion << " segundos" << endl;
 }
 
 int pedirTamMemoria()
@@ -207,6 +237,13 @@ int crearMemoria(int opc, Lista *l)
         }
     }while(opc<1 || opc>3);
     return ram;
+}
+
+long obtenerTiempo()
+{
+    struct timeval inicio;
+    gettimeofday(&inicio, NULL);
+    return inicio.tv_sec * 1000 + inicio.tv_usec / 1000;
 }
 
 #endif

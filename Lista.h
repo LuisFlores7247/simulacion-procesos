@@ -30,12 +30,11 @@ public:
 
     // Metodos de la clase Lista
     void nuevoProceso(Proceso *);
-    // void particionar(Proceso *);
     STATUS asignMemoria(Proceso *);
-    // Proceso hayEspacio(Proceso *);
     void juntarMemoria();
-
     void agregarAlistaRR(Proceso *);
+    //Metodos para estadisticas
+    double porcentajeMem(const int);
 
     // Metodos para imprimir
     void imprimir();
