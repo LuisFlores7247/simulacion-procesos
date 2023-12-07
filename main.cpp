@@ -10,6 +10,6 @@ int main()
     system("cls");
     
     iniciarSimulacion();
-
+    getch();
     return 0;
 }

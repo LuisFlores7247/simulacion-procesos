@@ -62,10 +62,53 @@ void simulacion(Proceso *p, Lista *l, int tamMax, int cuanMax, int cuanSistema, 
     long inicio = obtenerTiempo();
     while (true)
     {
+        if (_kbhit())
+        {
+            char tecla = _getch();
+            if (tecla == '\r')
+            {
+                break;
+            }
+            switch (tecla)
+            {
+            case 77:
+                /* flecha derecha */
+                if (l->getVelocidad() == VELOCIDAD_1)
+                    l->setVelocidad(VELOCIDAD_2);
+                else
+                {
+                    if (l->getVelocidad() == VELOCIDAD_2)
+                        l->setVelocidad(VELOCIDAD_3);
+                    else
+                        cout << endl << "No se puede ir mas rapido!!";
+                } 
+                cout << RESET;
+                break;
+            case 75:
+                /* flecha izquierda */
+                if (l->getVelocidad() == VELOCIDAD_3)
+                    l->setVelocidad(VELOCIDAD_2);
+                else
+                {
+                    if (l->getVelocidad() == VELOCIDAD_2)
+                        l->setVelocidad(VELOCIDAD_1);
+                    else
+                        cout << endl << "No se puede ir mas lento!!";
+                } 
+                cout << RESET;
+                break;
+            case ' ':
+                system("pause");
+                break;
+            }
+        }
         system("cls");
         cout << ROJO << "Para Terminar la simulacion presiona ENTER" << endl;
-
+        cout << "Si quiere pausar la simulacion presiona la barra espaciadora" << endl;
+        cout << "Para cambiar la velocidad usa las flechas de direccion izquierda y derecha" << endl << "Velocidad actual: ";
         cout << NEGRITA;
+        (l->getVelocidad() == VELOCIDAD_1) ? cout << " [1] " : (l->getVelocidad() == VELOCIDAD_2) ? cout << " [2] " : cout << " [3] ";
+        cout << endl;
 
         if (band == ENMEMORIA)
         {
@@ -120,43 +163,6 @@ void simulacion(Proceso *p, Lista *l, int tamMax, int cuanMax, int cuanSistema, 
             i--;
         }
 
-        if (_kbhit())
-        {
-            char tecla = _getch();
-            if (tecla == '\r')
-            {
-                break;
-            }
-            switch (tecla)
-            {
-            case 77:
-                /* flecha derecha */
-                if (l->getVelocidad() == VELOCIDAD_1)
-                    l->setVelocidad(VELOCIDAD_2);
-                else
-                {
-                    if (l->getVelocidad() == VELOCIDAD_2)
-                        l->setVelocidad(VELOCIDAD_3);
-                    else
-                        cout << endl << "No se puede ir mas rapido!!";
-                } 
-                cout << RESET;
-                break;
-            case 75:
-                /* flecha izquierda */
-                if (l->getVelocidad() == VELOCIDAD_3)
-                    l->setVelocidad(VELOCIDAD_2);
-                else
-                {
-                    if (l->getVelocidad() == VELOCIDAD_2)
-                        l->setVelocidad(VELOCIDAD_1);
-                    else
-                        cout << endl << "No se puede ir mas lento!!";
-                } 
-                cout << RESET;
-                break;
-            }
-        }
         Sleep(l->getVelocidad());
         i++;
     }

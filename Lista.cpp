@@ -9,7 +9,7 @@ Lista::Lista()
 {
     inicio = fin = NULL; // Inicializa los apuntadores
     inicioRR = finRR = NULL;
-    vel = VELOCIDAD_2; //Inicializa la velocidad de la simulacion como 2, es decir la intermedia
+    vel = VELOCIDAD_1; //Inicializa la velocidad de la simulacion como 1, es decir la mas lenta
 }
 
 // Setters
@@ -163,7 +163,6 @@ void Lista::ejecucion(const int cuanMax)
             
             q = inicioRR;
             inicioRR = inicioRR->liga;
-            // Poner aqui funcion que descargue el proceso de memoria y condense la memoria si es posible
             descargarProceso(q);
             this->juntarMemoria();             
         }
