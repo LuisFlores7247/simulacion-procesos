@@ -14,19 +14,25 @@ enum TAM_MEMORIA
 class Lista
 {
 public:
-    Lista();
+    int TrTs;
+    int cont;
+    Lista(int=0, int=0);
 
     // Setters
     void setInicio(Proceso *);
     void setFin(Proceso *);
     void setInicioRR(Proceso *);
     void setFinRR(Proceso *);
-
+    void setTrTs(int);
+    void setCont(int);
+    
     // Getters
     Proceso *getInicio();
     Proceso *getFin();
     Proceso *getInicioRR();
     Proceso *getFinRR();
+    int getTsTr();
+    int getCont();
 
     // Metodos de la clase Lista
     void nuevoProceso(Proceso *);

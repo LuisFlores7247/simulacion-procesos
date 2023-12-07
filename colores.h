@@ -17,6 +17,7 @@
 #define AMARILLO    "\033[33m"
 #define AZUL        "\033[34m"
 #define MAGENTA     "\033[35m"
+#define MORADO      "\033[41m"
 #define CYAN        "\033[36m"
 #define BLANCO      "\033[37m"
 

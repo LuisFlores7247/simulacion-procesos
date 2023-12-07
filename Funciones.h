@@ -45,7 +45,8 @@ void iniciarSimulacion()
 
 void simulacion(Proceso *p, Lista *l, int tamMax, int cuanMax, int cuanSistema, int ram)
 {
-
+    l->cont=0;
+    l->TrTs=0;
     /* Repite un ciclo desde 1 hasta el total de procesos. Llena el proceso con datos
     aleatoriosl, como paso siguiente imprime el proceso generado y realiza la asignacion en memoria,
     la cual retorna un apuntador a un objeto del tipo proceso; si el proceso en su atributo status
@@ -58,7 +59,8 @@ void simulacion(Proceso *p, Lista *l, int tamMax, int cuanMax, int cuanSistema, 
                              // ENMEMORIA, significa que puede seguir creando procesos ya que todos estan en memoria
                              // en caso de que este ENESPERA, significa que existe un proceso en espera por lo cual no se debe generar procesos
 
-    int i = 1;
+    int i = 1, all_estancias=0;
+    double temp_ejecucion=0;
     long inicio = obtenerTiempo();
     while (true)
     {
@@ -70,6 +72,7 @@ void simulacion(Proceso *p, Lista *l, int tamMax, int cuanMax, int cuanSistema, 
         if (band == ENMEMORIA)
         {
             p = new Proceso(i, rand() % tamMax + 1, rand() % cuanMax + 1);
+            p->tiempo_Servicio = p->cuanto;
         }
 
         cout << endl
@@ -92,15 +95,16 @@ void simulacion(Proceso *p, Lista *l, int tamMax, int cuanMax, int cuanSistema, 
         // Parte de la ejecucion (Round Robin)
         cout << endl
              << endl
-             << AZUL << "Lista RR: ";
+             << NEGRITA << AZUL << "Lista RR: ";
         l->imprimir_ListaListos();
         cout << endl
              << RESET;
         l->ejecucion(cuanSistema);
         cout << endl << RESET;
         l->imprimir();
+        // p->tiempos[1]+=cuanSistema;
         cout << endl << endl << CYAN << "El porcentaje de RAM es: " << setprecision(2) << fixed << (l->porcentajeMem(ram) * 100) << "%";
-        cout << endl << endl << AZUL << "Lista RR: ";
+        cout << endl << endl << NEGRITA << AZUL << "Lista RR: ";
         l->imprimir_ListaListos();
 
         if (band == ENESPERA)
@@ -125,8 +129,10 @@ void simulacion(Proceso *p, Lista *l, int tamMax, int cuanMax, int cuanSistema, 
     }
     long fin = obtenerTiempo();
     system("cls");
+    
     long tiempoEjecucion = ((fin - inicio) / 1000);
-    cout << "Tiempo de ejecucion: " << tiempoEjecucion << " segundos" << endl;
+    cout<< endl << NEGRITA << MAGENTA << "Promedio de Tr/Ts x proceso: " << l->TrTs / l->cont << endl;
+    cout << "Tiempo de ejecucion: " << NEGRITA << tiempoEjecucion << " segundos" << endl;
 }
 
 int pedirTamMemoria()

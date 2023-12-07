@@ -19,24 +19,29 @@ public:
     int tamanio;
     int cuanto;
     int mem_asignada;
+    double tiempo_Servicio;
+    double tiempo_Estancia;
     STATUS status;
     Proceso *izq;
     Proceso *der;
     Proceso *liga;
-    Proceso(int = 0, int = 0, int = 0);
+    Proceso(int = 0, int = 0, int = 0, double=0);
 
     // setters
     void setId(int);
     void setTamanio(int);
     void setCuanto(int);
     void setMem_asignada(int);
+    void setServicio(double);
+    void setEstancia(double);
 
     // getters
     int getId();
     int getTamanio();
     int getCuanto();
     int getMem_asignada();
-
+    double getServicio();
+    double getEstancia();
     // Sobrecarga de operadores
     Proceso &operator=(const Proceso &);
 

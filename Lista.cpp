@@ -1,12 +1,16 @@
 #include <iostream>
 #include "Lista.h"
 #include "colores.h"
+#include<iomanip>
+#include<cstdlib>
 
 using namespace std;
 
 // Constructor de la clase Lista
-Lista::Lista()
+Lista::Lista(int _TrTs, int _cont) 
 {
+    this->TrTs=_TrTs;
+    this->cont=_cont;
     inicio = fin = NULL; // Inicializa los apuntadores
     inicioRR = finRR = NULL;
 }
@@ -17,6 +21,8 @@ void Lista::setInicio(Proceso *_inicio) { inicio->der = _inicio; }
 void Lista::setFin(Proceso *_fin) { fin = _fin; }
 void Lista::setInicioRR(Proceso *_inicioRR) { inicioRR = _inicioRR; }
 void Lista::setFinRR(Proceso *_finRR) { finRR = _finRR; }
+void Lista::setTrTs(int _TrTs){ TrTs = _TrTs; }
+void Lista::setCont(int _cont){ cont = _cont; }
 
 // Getters
 
@@ -24,6 +30,8 @@ Proceso *Lista::getInicio() { return inicio; }
 Proceso *Lista::getFin() { return fin; }
 Proceso *Lista::getInicioRR() { return inicioRR; }
 Proceso *Lista::getFinRR() { return finRR; }
+int Lista::getTsTr() { return TrTs; }
+int Lista::getCont() { return cont; }
 
 // Metodos de la clase Lista
 
@@ -142,15 +150,28 @@ void Lista::imprimir()
 void Lista::ejecucion(const int cuanMax)
 {
     // Funcion que ejecuta el proceso colocado en el inicio de la lista de RR, asi como acomodandola dependiendo de como quede el proceso despues de su ejecucion
-    Proceso *q;
- 
+    Proceso *q, *t = inicioRR;
+    
     if (inicioRR != NULL)
     {
         cout << endl
              << NEGRITA << VERDE << "El proceso " << imprimirProceso(inicioRR) << " esta siendo ejecutado en el procesador... "<<endl;
         cout<<"El proceso "<< imprimirProceso(inicioRR,cuanMax) << " ha salido del procesador" <<endl;
+        
+        if(t->cuanto<cuanMax){
+            t->tiempo_Estancia = t->tiempo_Estancia + t->cuanto;
+            t=t->liga;
+        }
+        while(t!=NULL){
+            
+            t->tiempo_Estancia = t->tiempo_Estancia + cuanMax;
+            t=t->liga;
+        }
+        
         if (inicioRR->cuanto - cuanMax <= 0)
-        {
+        {  
+            TrTs = TrTs + (inicioRR->tiempo_Estancia / inicioRR->tiempo_Servicio);
+            cout << endl << endl << MAGENTA << "Tiempo de Estancia/Servicio: " << setprecision(2) << fixed << inicioRR->tiempo_Estancia / inicioRR->tiempo_Servicio << " cuantos..";
             inicioRR->cuanto = 0;
             cout << endl
                  << MAGENTA << "El proceso termino su ejecucion !!!, descargando de memoria..." << RESET << RESET;
@@ -158,7 +179,9 @@ void Lista::ejecucion(const int cuanMax)
             inicioRR = inicioRR->liga;
             // Poner aqui funcion que descargue el proceso de memoria y condense la memoria si es posible
             cout<<endl;
+            cont++;
             descargarProceso(q);
+            
             cout<<endl;
             this->juntarMemoria();             
         }
