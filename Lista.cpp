@@ -9,6 +9,7 @@ Lista::Lista()
 {
     inicio = fin = NULL; // Inicializa los apuntadores
     inicioRR = finRR = NULL;
+    vel = VELOCIDAD_2; //Inicializa la velocidad de la simulacion como 2, es decir la intermedia
 }
 
 // Setters
@@ -17,6 +18,7 @@ void Lista::setInicio(Proceso *_inicio) { inicio->der = _inicio; }
 void Lista::setFin(Proceso *_fin) { fin = _fin; }
 void Lista::setInicioRR(Proceso *_inicioRR) { inicioRR = _inicioRR; }
 void Lista::setFinRR(Proceso *_finRR) { finRR = _finRR; }
+void Lista::setVelocidad(VELOCIDAD _vel) { vel = _vel; }
 
 // Getters
 
@@ -24,6 +26,7 @@ Proceso *Lista::getInicio() { return inicio; }
 Proceso *Lista::getFin() { return fin; }
 Proceso *Lista::getInicioRR() { return inicioRR; }
 Proceso *Lista::getFinRR() { return finRR; }
+VELOCIDAD Lista::getVelocidad() { return vel; }
 
 // Metodos de la clase Lista
 
@@ -146,20 +149,22 @@ void Lista::ejecucion(const int cuanMax)
  
     if (inicioRR != NULL)
     {
-        cout << endl
+        if (vel != VELOCIDAD_3)
+        {
+            cout << endl
              << NEGRITA << VERDE << "El proceso " << imprimirProceso(inicioRR) << " esta siendo ejecutado en el procesador... "<<endl;
-        cout<<"El proceso "<< imprimirProceso(inicioRR,cuanMax) << " ha salido del procesador" <<endl;
+            cout<<"El proceso "<< imprimirProceso(inicioRR,cuanMax) << " ha salido del procesador" <<endl;
+        }
         if (inicioRR->cuanto - cuanMax <= 0)
         {
             inicioRR->cuanto = 0;
-            cout << endl
-                 << MAGENTA << "El proceso termino su ejecucion !!!, descargando de memoria..." << RESET << RESET;
+            if (vel != VELOCIDAD_3)
+                cout << endl << MAGENTA << "El proceso termino su ejecucion !!!, descargando de memoria..." << RESET << RESET << endl << endl;
+            
             q = inicioRR;
             inicioRR = inicioRR->liga;
             // Poner aqui funcion que descargue el proceso de memoria y condense la memoria si es posible
-            cout<<endl;
             descargarProceso(q);
-            cout<<endl;
             this->juntarMemoria();             
         }
         else
@@ -170,11 +175,6 @@ void Lista::ejecucion(const int cuanMax)
             finRR = finRR->liga;
             finRR->liga = NULL;
         }
-    }
-    else
-    {
-        cout << endl
-             << "El procesador no contiene ningun proceso, no hay procesos necesarios a ejecutar";
     }
 }
 
@@ -243,10 +243,13 @@ void Lista::juntarMemoria()
                 }
                 
                 delete(q);
-                cout<<endl<<endl;
-                cout<<ROJO<<"Uniendo buddys"<<endl;
-                this->imprimir();  
-                cout<<endl;
+                if (vel != VELOCIDAD_3)
+                {
+                    cout<<endl<<endl;
+                    cout<<ROJO<<"Uniendo buddys"<<endl;
+                    this->imprimir();  
+                    cout<<endl;
+                }
 
             }
 
@@ -264,4 +267,15 @@ void Lista::juntarMemoria()
     }
 
 }
-   
+Lista::~Lista()
+{
+    Proceso *p = inicio, *q = inicio;
+    while (p != NULL)
+    {
+        p = q->der;
+        delete q;
+        q = p;
+
+    }
+    
+}

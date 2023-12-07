@@ -71,48 +71,55 @@ void simulacion(Proceso *p, Lista *l, int tamMax, int cuanMax, int cuanSistema, 
         {
             p = new Proceso(i, rand() % tamMax + 1, rand() % cuanMax + 1);
         }
-
+        
         cout << endl
-             << endl;
+            << endl;
         cout << endl
-             << AMARILLO << "Proceso " << i << ":   " << imprimirProceso(p) << RESET;
+            << AMARILLO << "Proceso " << i << ":   " << imprimirProceso(p) << RESET;
         cout << endl;
 
         band = p->status = l->asignMemoria(p);
-
         if (p->status == ENESPERA)
         {
             cout << endl
-                 << "En espera, espacio no disponible...";
+                << "En espera, espacio no disponible...";
             cout << endl;
         }
-        cout << endl;
-        l->imprimir();
-        cout << endl << endl << CYAN << "El porcentaje de RAM es: " << setprecision(2) << fixed << (l->porcentajeMem(ram) * 100) << "%";
-        // Parte de la ejecucion (Round Robin)
-        cout << endl
-             << endl
-             << AZUL << "Lista RR: ";
-        l->imprimir_ListaListos();
-        cout << endl
-             << RESET;
+        if (l->getVelocidad() != VELOCIDAD_3)
+        {
+            cout << endl;
+            l->imprimir();
+            cout << endl << endl << CYAN << "El porcentaje de RAM es: " << setprecision(2) << fixed << (l->porcentajeMem(ram) * 100) << "%";
+            // Parte de la ejecucion (Round Robin)
+            cout << endl
+                << endl
+                << AZUL << "Lista RR: ";
+            l->imprimir_ListaListos();
+            cout << endl
+                << RESET;
+        }
+        
         l->ejecucion(cuanSistema);
-        cout << endl << RESET;
-        l->imprimir();
-        cout << endl << endl << CYAN << "El porcentaje de RAM es: " << setprecision(2) << fixed << (l->porcentajeMem(ram) * 100) << "%";
-        cout << endl << endl << AZUL << "Lista RR: ";
-        l->imprimir_ListaListos();
+
+        if (l->getVelocidad() != VELOCIDAD_3)
+        {
+            
+            cout << endl << RESET;
+            l->imprimir();
+            cout << endl << endl << CYAN << "El porcentaje de RAM es: " << setprecision(2) << fixed << (l->porcentajeMem(ram) * 100) << "%";
+            cout << endl << endl << AZUL << "Lista RR: ";
+            l->imprimir_ListaListos();
+            cout << RESET;
+
+            cout << endl
+                << endl;
+        }
 
         if (band == ENESPERA)
         {
             i--;
         }
 
-        cout << RESET;
-
-        cout << endl
-             << endl;
-        // Sleep(1000);
         if (_kbhit())
         {
             char tecla = _getch();
@@ -120,7 +127,37 @@ void simulacion(Proceso *p, Lista *l, int tamMax, int cuanMax, int cuanSistema, 
             {
                 break;
             }
+            switch (tecla)
+            {
+            case 77:
+                /* flecha derecha */
+                if (l->getVelocidad() == VELOCIDAD_1)
+                    l->setVelocidad(VELOCIDAD_2);
+                else
+                {
+                    if (l->getVelocidad() == VELOCIDAD_2)
+                        l->setVelocidad(VELOCIDAD_3);
+                    else
+                        cout << endl << "No se puede ir mas rapido!!";
+                } 
+                cout << RESET;
+                break;
+            case 75:
+                /* flecha izquierda */
+                if (l->getVelocidad() == VELOCIDAD_3)
+                    l->setVelocidad(VELOCIDAD_2);
+                else
+                {
+                    if (l->getVelocidad() == VELOCIDAD_2)
+                        l->setVelocidad(VELOCIDAD_1);
+                    else
+                        cout << endl << "No se puede ir mas lento!!";
+                } 
+                cout << RESET;
+                break;
+            }
         }
+        Sleep(l->getVelocidad());
         i++;
     }
     long fin = obtenerTiempo();
