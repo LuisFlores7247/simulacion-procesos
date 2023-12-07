@@ -131,8 +131,8 @@ void simulacion(Proceso *p, Lista *l, int tamMax, int cuanMax, int cuanSistema, 
     system("cls");
     
     long tiempoEjecucion = ((fin - inicio) / 1000);
-    cout<< endl << NEGRITA << MAGENTA << "Promedio de Tr/Ts x proceso: " << l->TrTs / l->cont << endl;
-    cout << "Tiempo de ejecucion: " << NEGRITA << tiempoEjecucion << " segundos" << endl;
+    cout<< endl << NEGRITA << MAGENTA << "Promedio de Tr/Ts x proceso: " << l->TrTs / l->cont << " cuantos.."<< endl;
+    cout << "Tiempo de ejecucion: " << NEGRITA << BLANCO << tiempoEjecucion << " segundos" << endl;
 }
 
 int pedirTamMemoria()
