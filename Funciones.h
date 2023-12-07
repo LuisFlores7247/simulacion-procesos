@@ -20,7 +20,7 @@ void simulacion(Proceso *, Lista *, int, int, int, int);
 int pedirTamMemoria();
 int pedirTamMax(int);
 int pedirCuanMax();
-int pedirCuanSistema();
+int pedirCuanSistema(int);
 int crearMemoria(int, Lista *);
 
 long obtenerTiempo();
@@ -35,7 +35,7 @@ void iniciarSimulacion()
     int ram = crearMemoria(pedirTamMemoria(), l);
     int tamMax = pedirTamMax(ram);
     int cuanMax = pedirCuanMax();
-    int cuanSistema = pedirCuanSistema();
+    int cuanSistema = pedirCuanSistema(cuanMax);
 
     cout << "Iniciando simulacion..." << endl;
     Sleep(1.5);
@@ -45,7 +45,6 @@ void iniciarSimulacion()
 
 void simulacion(Proceso *p, Lista *l, int tamMax, int cuanMax, int cuanSistema, int ram)
 {
-
     /* Repite un ciclo desde 1 hasta el total de procesos. Llena el proceso con datos
     aleatoriosl, como paso siguiente imprime el proceso generado y realiza la asignacion en memoria,
     la cual retorna un apuntador a un objeto del tipo proceso; si el proceso en su atributo status
@@ -58,6 +57,8 @@ void simulacion(Proceso *p, Lista *l, int tamMax, int cuanMax, int cuanSistema, 
                              // ENMEMORIA, significa que puede seguir creando procesos ya que todos estan en memoria
                              // en caso de que este ENESPERA, significa que existe un proceso en espera por lo cual no se debe generar procesos
 
+    l->cont=0;
+    l->TrTs=0;
     int i = 1;
     long inicio = obtenerTiempo();
     while (true)
@@ -113,6 +114,7 @@ void simulacion(Proceso *p, Lista *l, int tamMax, int cuanMax, int cuanSistema, 
         if (band == ENMEMORIA)
         {
             p = new Proceso(i, rand() % tamMax + 1, rand() % cuanMax + 1);
+            p->tiempo_Servicio = p->cuanto;
         }
         
         cout << endl
@@ -158,32 +160,50 @@ void simulacion(Proceso *p, Lista *l, int tamMax, int cuanMax, int cuanSistema, 
                 << endl;
         }
 
-        if (band == ENESPERA)
+        if (band != ENESPERA)
         {
-            i--;
+            i++;
         }
 
         Sleep(l->getVelocidad());
-        i++;
+        
     }
     long fin = obtenerTiempo();
     system("cls");
+    
     long tiempoEjecucion = ((fin - inicio) / 1000);
-    cout << "Tiempo de ejecucion: " << tiempoEjecucion << " segundos" << endl;
+    cout<< endl << NEGRITA << MAGENTA << "Promedio de Tr/Ts x proceso: " << BLANCO << l->TrTs / l->cont << " cuantos"<< endl;
+    cout << MAGENTA << "Tiempo de ejecucion: " << BLANCO << tiempoEjecucion << " segundos" << endl;
 }
 
 int pedirTamMemoria()
 {
     int opc;
+    bool check = false;
     do
     { // Repite el ciclo mientras la opcion sea invalida
         system("cls");
-        cout << "Tamanios de memoria disponibles: " << endl;
+        cout << "Tamanios de memoria disponibles : " << endl;
         cout << "1. 1Mb\n2. 4Mb\n3. 8Mb\n";
         cout << endl
-             << "TU opcion: ";
+             << "Selecciona del 1-3...";
+        cout << endl
+             << "Tu opcion: ";
         cin >> opc;
-    } while (opc < 1 || opc > 3);
+
+        if (opc < 1 || opc > 3)
+        {
+            cout << endl
+                 << "Opcion no disponible..." << endl;
+            check = true;
+            system("pause");
+        }
+        else
+        {
+            check = false;
+        }
+
+    } while (check == true);
 
     return opc;
 }
@@ -195,13 +215,15 @@ int pedirTamMax(int ram)
     do
     {
 
+        system("cls");
         cout << endl
              << "Ingresa el tamanio maximo asignado a un proceso: ";
         cin >> tamMax;
 
         if (tamMax > ram / 2)
         {
-            cout << "Opcio invalida. Introduce un valor menor";
+            cout << "Opcio invalida. Introduce un valor menor" << endl;
+            system("pause");
         }
 
     } while (tamMax > ram / 2);
@@ -215,13 +237,23 @@ int pedirCuanMax()
     return cuanMax;
 }
 
-int pedirCuanSistema()
+int pedirCuanSistema(int cuanMax)
 {
     int cuanSistema;
-    cout << "Ingresa los cuantos del sistema: ";
-    cin >> cuanSistema;
+    do{
+        system("cls");
+        cout << "Ingresa los cuantos del sistema: ";
+        cin >>cuanSistema;
+        if(cuanSistema>=cuanMax || cuanSistema<1){
+            cout << endl << "Cuantos del sistema invalidos..." << endl;
+            system("pause");
+        }
+
+    }while(cuanSistema>=cuanMax || cuanSistema<1);
+    
+
     return cuanSistema;
-    // validar que no sea mayor a cuanMax
+
 }
 
 int crearMemoria(int opc, Lista *l)
@@ -229,23 +261,28 @@ int crearMemoria(int opc, Lista *l)
     TAM_MEMORIA ram;
     /* Crea un proceso inicial el cual tiene como tarea almacenar el valor de
     la memoria RAM para luego en base a este generar las particiones de memoria*/
-    if (opc == 1)
-    {
-        l->nuevoProceso(new Proceso(0, TAM_1Mb, 0));
-        ram = TAM_1Mb;
-    }
+    do{
+        if (opc == 1)
+        {
+            l->nuevoProceso(new Proceso(0, TAM_1Mb, 0));
+            ram = TAM_1Mb;
+        }
 
-    else if (opc == 2)
-    {
-        l->nuevoProceso(new Proceso(0, TAM_4Mb, 0));
-        ram = TAM_4Mb;
-    }
-    else if (opc == 3)
-    {
+        else if (opc == 2)
+        {
+            l->nuevoProceso(new Proceso(0, TAM_4Mb, 0));
+            ram = TAM_4Mb;
+        }
+        else if (opc == 3)
+        {
 
-        l->nuevoProceso(new Proceso(0, TAM_8Mb, 0));
-        ram = TAM_8Mb;
-    }
+            l->nuevoProceso(new Proceso(0, TAM_8Mb, 0));
+            ram = TAM_8Mb;
+        }
+        else{
+            cout << endl << "Opcion invalida....";
+        }
+    }while(opc<1 || opc>3);
     return ram;
 }
 

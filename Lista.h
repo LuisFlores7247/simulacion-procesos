@@ -20,7 +20,9 @@ enum VELOCIDAD
 class Lista
 {
 public:
-    Lista();
+    int TrTs;
+    int cont;
+    Lista(int=0, int=0);
 
     // Setters
     void setInicio(Proceso *);
@@ -29,11 +31,16 @@ public:
     void setFinRR(Proceso *);
     void setVelocidad(VELOCIDAD);
 
+    void setTrTs(int);
+    void setCont(int);
+    
     // Getters
     Proceso *getInicio();
     Proceso *getFin();
     Proceso *getInicioRR();
     Proceso *getFinRR();
+    int getTsTr();
+    int getCont();
     VELOCIDAD getVelocidad();
 
     // Metodos de la clase Lista
