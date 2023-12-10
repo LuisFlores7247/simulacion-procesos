@@ -8,7 +8,7 @@ int main() {
     while (true) {
         if (_kbhit()) {  // Verifica si se ha presionado una tecla
             key = _getch();  // Obtiene la tecla presionada
-
+            std :: cout << key << std :: endl;
             // Verifica qué tecla se ha presionado
             switch (key) {
                 case 72: // Tecla de flecha arriba
@@ -29,14 +29,23 @@ int main() {
                 case '\r':
                     std::cout << "Enter presiondado" << std::endl;
                     break;
+                case '1':
+                    std :: cout << "Tecla 1 presionada" << std::endl;
+                    break;
+                case '2':
+                    std :: cout << "Tecla 2 presionada" << std::endl;
+                    break;
+                case '3':
+                    std :: cout << "Tecla 3 presionada" << std::endl;
+                    break;
                 default:
                     std::cout << "Tecla no reconocida" << std::endl;
                     break;
             }
         }
-        std:: cout << "Delay...";
+        // std:: cout << "Delay...";
 
-        Sleep(0);
+        // Sleep(0);
         // Aquí puedes poner el resto de tu lógica del programa
     }
 
