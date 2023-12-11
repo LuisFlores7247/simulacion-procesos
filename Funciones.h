@@ -39,19 +39,19 @@ void presentacion(){
     string integrantes[] = {"Daan Jostin Carabez Garcia", "Sergio Eder Cervantes Rincon", "Angel Esteban Esparza Munoz", "Luis David Flores Martinez"};
 
     // Imprimir la portada
-    cout << "\t------------------------------------------------------" << endl;
-    cout << "\t\t" << titulo << endl;
-    cout << "\t\t" << institucion << endl;
-    cout << "\t\t" << carr << endl;
-    cout << "\t\t" << centro << endl;
-    cout << "\t\tMaestro: " << prof << endl;
-    cout << "\t\tFecha: " << fecha << endl;
-    cout << "\t------------------------------------------------------" << endl;
+    cout << "\t\t\t------------------------------------------------------" << endl;
+    cout << "\t\t\t\t" << titulo << endl;
+    cout << "\t\t\t\t" << institucion << endl;
+    cout << "\t\t\t\t" << carr << endl;
+    cout << "\t\t\t\t" << centro << endl;
+    cout << "\t\t\t\tMaestro: " << prof << endl;
+    cout << "\t\t\t\tFecha: " << fecha << endl;
+    cout << "\t\t\t------------------------------------------------------" << endl;
 
     // Imprimir la lista de integrantes
-    cout << "\n\t\t\tIntegrantes:\n";
+    cout << "\n\t\t\t\t\tIntegrantes:\n";
     for (const auto &integrante : integrantes) {
-        cout << "\t\t- " << integrante << endl;
+        cout << "\t\t\t\t- " << integrante << endl;
     }
 
 }
