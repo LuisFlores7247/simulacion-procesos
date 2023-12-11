@@ -12,6 +12,8 @@
 #include <sys/time.h>
 #include <math.h>
 
+void presentacion();
+
 void iniciarSimulacion();
 void limpiarMemoria(Lista *);
 
@@ -25,6 +27,34 @@ int crearMemoria(int, Lista *);
 
 long obtenerTiempo();
 
+void presentacion(){
+    
+    // Datos de la portada
+    string titulo = "Proyecto Sistemas Operativos";
+    string institucion = "Universidad Autonoma de Aguascalientes";
+    string carr = "Ing. Sistemas Computacionales";
+    string centro = "Centro de Ciencias Basicas";
+    string prof = "Javier Santiago Lopez Cortez";
+    string fecha = "11 de diciembre de 2023";
+    string integrantes[] = {"Daan Jostin Carabez Garcia", "Sergio Eder Cervantes Rincon", "Angel Esteban Esparza Munoz", "Luis David Flores Martinez"};
+
+    // Imprimir la portada
+    cout << "\t------------------------------------------------------" << endl;
+    cout << "\t\t" << titulo << endl;
+    cout << "\t\t" << institucion << endl;
+    cout << "\t\t" << carr << endl;
+    cout << "\t\t" << centro << endl;
+    cout << "\t\tMaestro: " << prof << endl;
+    cout << "\t\tFecha: " << fecha << endl;
+    cout << "\t------------------------------------------------------" << endl;
+
+    // Imprimir la lista de integrantes
+    cout << "\n\t\t\tIntegrantes:\n";
+    for (const auto &integrante : integrantes) {
+        cout << "\t\t- " << integrante << endl;
+    }
+
+}
 void iniciarSimulacion()
 {
     srand(time(NULL));
@@ -32,6 +62,8 @@ void iniciarSimulacion()
 
     Proceso *p = NULL;
 
+    presentacion();
+    system("pause");
     int ram = crearMemoria(pedirTamMemoria(), l);
     int tamMax = pedirTamMax(ram);
     int cuanMax = pedirCuanMax();
