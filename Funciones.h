@@ -12,6 +12,8 @@
 #include <sys/time.h>
 #include <math.h>
 
+void presentacion();
+
 void iniciarSimulacion();
 void limpiarMemoria(Lista *);
 
@@ -25,6 +27,34 @@ int crearMemoria(int, Lista *);
 
 long obtenerTiempo();
 
+void presentacion(){
+    
+    // Datos de la portada
+    string titulo = "Proyecto Sistemas Operativos";
+    string institucion = "Universidad Autonoma de Aguascalientes";
+    string carr = "Ing. Sistemas Computacionales";
+    string centro = "Centro de Ciencias Basicas";
+    string prof = "Javier Santiago Lopez Cortez";
+    string fecha = "11 de diciembre de 2023";
+    string integrantes[] = {"Daan Jostin Carabez Garcia", "Sergio Eder Cervantes Rincon", "Angel Esteban Esparza Munoz", "Luis David Flores Martinez"};
+
+    // Imprimir la portada
+    cout << "\t\t\t------------------------------------------------------" << endl;
+    cout << "\t\t\t\t" << titulo << endl;
+    cout << "\t\t\t\t" << institucion << endl;
+    cout << "\t\t\t\t" << carr << endl;
+    cout << "\t\t\t\t" << centro << endl;
+    cout << "\t\t\t\tMaestro: " << prof << endl;
+    cout << "\t\t\t\tFecha: " << fecha << endl;
+    cout << "\t\t\t------------------------------------------------------" << endl;
+
+    // Imprimir la lista de integrantes
+    cout << "\n\t\t\t\t\tIntegrantes:\n";
+    for (const auto &integrante : integrantes) {
+        cout << "\t\t\t\t- " << integrante << endl;
+    }
+
+}
 void iniciarSimulacion()
 {
     srand(time(NULL));
@@ -32,6 +62,8 @@ void iniciarSimulacion()
 
     Proceso *p = NULL;
 
+    presentacion();
+    system("pause");
     int ram = crearMemoria(pedirTamMemoria(), l);
     int tamMax = pedirTamMax(ram);
     int cuanMax = pedirCuanMax();
@@ -72,41 +104,28 @@ void simulacion(Proceso *p, Lista *l, int tamMax, int cuanMax, int cuanSistema, 
             }
             switch (tecla)
             {
-            case 77:
-                /* flecha derecha */
-                if (l->getVelocidad() == VELOCIDAD_1)
-                    l->setVelocidad(VELOCIDAD_2);
-                else
-                {
-                    if (l->getVelocidad() == VELOCIDAD_2)
-                        l->setVelocidad(VELOCIDAD_3);
-                    else
-                        cout << endl << "No se puede ir mas rapido!!";
-                } 
-                cout << RESET;
-                break;
-            case 75:
-                /* flecha izquierda */
-                if (l->getVelocidad() == VELOCIDAD_3)
-                    l->setVelocidad(VELOCIDAD_2);
-                else
-                {
-                    if (l->getVelocidad() == VELOCIDAD_2)
-                        l->setVelocidad(VELOCIDAD_1);
-                    else
-                        cout << endl << "No se puede ir mas lento!!";
-                } 
-                cout << RESET;
-                break;
             case ' ':
+                //Pausa de la simulacion
                 system("pause");
+                break;
+            case '1':
+                //Cambio a Velocidad 1
+                l->setVelocidad(VELOCIDAD_1);
+                break;
+            case '2':
+                //Cambio a Velocidad 2
+                l->setVelocidad(VELOCIDAD_2);
+                break;
+            case '3': 
+                //Cambio a Velocidad 3
+                l->setVelocidad(VELOCIDAD_3);
                 break;
             }
         }
         system("cls");
         cout << ROJO << "Para Terminar la simulacion presiona ENTER" << endl;
         cout << "Si quiere pausar la simulacion presiona la barra espaciadora" << endl;
-        cout << "Para cambiar la velocidad usa las flechas de direccion izquierda y derecha" << endl << "Velocidad actual: ";
+        cout << "Para cambiar la velocidad usa las teclas 1 , 2 y 3 para cada velocidad" << endl << "Velocidad actual: ";
         cout << NEGRITA;
         (l->getVelocidad() == VELOCIDAD_1) ? cout << " [1] " : (l->getVelocidad() == VELOCIDAD_2) ? cout << " [2] " : cout << " [3] ";
         cout << endl;
