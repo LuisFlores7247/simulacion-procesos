@@ -1,19 +1,20 @@
 #include <iostream>
 #include "Lista.h"
 #include "colores.h"
-#include<iomanip>
-#include<cstdlib>
+#include <iomanip>
+#include <cstdlib>
+#include <math.h>
 
 using namespace std;
 
 // Constructor de la clase Lista
-Lista::Lista(int _TrTs, int _cont) 
+Lista::Lista(int _TrTs, int _cont)
 {
-    this->TrTs=_TrTs;
-    this->cont=_cont;
+    this->TrTs = _TrTs;
+    this->cont = _cont;
     inicio = fin = NULL; // Inicializa los apuntadores
     inicioRR = finRR = NULL;
-    vel = VELOCIDAD_1; //Inicializa la velocidad de la simulacion como 1, es decir la mas lenta
+    vel = VELOCIDAD_1; // Inicializa la velocidad de la simulacion como 1, es decir la mas lenta
 }
 
 // Setters
@@ -22,8 +23,8 @@ void Lista::setInicio(Proceso *_inicio) { inicio->der = _inicio; }
 void Lista::setFin(Proceso *_fin) { fin = _fin; }
 void Lista::setInicioRR(Proceso *_inicioRR) { inicioRR = _inicioRR; }
 void Lista::setFinRR(Proceso *_finRR) { finRR = _finRR; }
-void Lista::setTrTs(int _TrTs){ TrTs = _TrTs; }
-void Lista::setCont(int _cont){ cont = _cont; }
+void Lista::setTrTs(int _TrTs) { TrTs = _TrTs; }
+void Lista::setCont(int _cont) { cont = _cont; }
 void Lista::setVelocidad(VELOCIDAD _vel) { vel = _vel; }
 
 // Getters
@@ -37,6 +38,9 @@ int Lista::getCont() { return cont; }
 VELOCIDAD Lista::getVelocidad() { return vel; }
 
 // Metodos de la clase Lista
+
+void gotoxy(int x, int y);
+int contarDigitos(int);
 
 void Lista::nuevoProceso(Proceso *aux)
 {
@@ -123,26 +127,30 @@ double Lista::porcentajeMem(const int tamRam)
             if (aux->status == ENMEMORIA)
                 suma += aux->mem_asignada;
             aux = aux->der;
-        }        
+        }
     }
-    return suma/tamRam;
+    return suma / tamRam;
 }
 
-
-void Lista::imprimir()
+void Lista::imprimir(int consoleWidth)
 {
+    int leftPadding;
     if (inicio == NULL)
     {
+        leftPadding = (consoleWidth - 14) / 2;
+        gotoxy(leftPadding, 10);
         cout << "Lista Vacia..." << endl;
     }
     else
     {
         Proceso *aux = inicio;
-        while (aux != NULL)
-        {   
-            aux->status == HUECO ? cout << "[" << aux->id << "," << aux->tamanio << "," << aux->cuanto << "]"
-                                 : cout << "[" << aux->id << "," << aux->tamanio << "(" << aux->mem_asignada << ")," << aux->cuanto << "]";
+        string line = "";
+        int i = 0;
 
+        while (aux != NULL)
+        {
+            aux->status == HUECO ? cout << "[" << aux->id << "," << aux->tamanio << "," << aux->cuanto << "]"
+                                 : cout << "[" << aux->id << "," << aux->tamanio << "(" << (aux->mem_asignada) << ")," << (aux->cuanto) << "]";
             aux = aux->der;
         }
     }
@@ -150,47 +158,54 @@ void Lista::imprimir()
 
 // Metodos para el correcto funcionamiento de Round Robin
 
-void Lista::ejecucion(const int cuanMax)
+void Lista::ejecucion(const int cuanMax, int consoleWidth)
 {
     // Funcion que ejecuta el proceso colocado en el inicio de la lista de RR, asi como acomodandola dependiendo de como quede el proceso despues de su ejecucion
     Proceso *q, *t = inicioRR;
-    
+
     if (inicioRR != NULL)
     {
         if (vel != VELOCIDAD_3)
         {
-            cout << endl
-            << NEGRITA << VERDE << "El proceso " << imprimirProceso(inicioRR) << " esta siendo ejecutado en el procesador... "<<endl;
-            cout<<"El proceso "<< imprimirProceso(inicioRR,cuanMax) << " ha salido del procesador" <<endl;
+            cout << endl;
+            cout << NEGRITA << VERDE << "El proceso " << imprimirProceso(inicioRR) << " esta siendo ejecutado en el procesador... " << endl;
+
+            cout << "El proceso " << imprimirProceso(inicioRR, cuanMax) << " ha salido del procesador" << endl;
         }
-        if(t->cuanto<cuanMax){
+        if (t->cuanto < cuanMax)
+        {
             t->tiempo_Estancia = t->tiempo_Estancia + t->cuanto;
-            t=t->liga;
+            t = t->liga;
         }
-        while(t!=NULL){
-            
+        while (t != NULL)
+        {
+
             t->tiempo_Estancia = t->tiempo_Estancia + cuanMax;
-            t=t->liga;
+            t = t->liga;
         }
-        
+
         if (inicioRR->cuanto - cuanMax <= 0)
-        {  
+        {
             TrTs = TrTs + (inicioRR->tiempo_Estancia / inicioRR->tiempo_Servicio);
             inicioRR->cuanto = 0;
             if (vel != VELOCIDAD_3)
             {
-                cout << endl << MAGENTA << "El proceso termino su ejecucion !!!, descargando de memoria..." << endl;
-                cout << endl << endl << MAGENTA << "Tiempo de Estancia/Servicio: " << setprecision(2) << fixed << inicioRR->tiempo_Estancia / inicioRR->tiempo_Servicio << " cuantos.."<< RESET << RESET << endl << endl;
+                cout << endl;
+
+                cout << MAGENTA << "El proceso termino su ejecucion !!!, descargando de memoria..." << endl;
+
+                cout << MAGENTA << "Tiempo de Estancia/Servicio: " << setprecision(2) << fixed << inicioRR->tiempo_Estancia / inicioRR->tiempo_Servicio << " cuantos.." << RESET << RESET << endl
+                     << endl;
             }
-            
+
             q = inicioRR;
             inicioRR = inicioRR->liga;
             cont++;
             descargarProceso(q);
-            this->juntarMemoria();             
+            this->juntarMemoria(consoleWidth);
         }
         else
-        {   
+        {
             inicioRR->cuanto -= cuanMax;
             finRR->liga = inicioRR;
             inicioRR = inicioRR->liga;
@@ -209,41 +224,53 @@ void Lista::imprimir_ListaListos()
     else
     {
         Proceso *aux = inicioRR;
+        int i = 0;
         while (aux != NULL)
         {
             cout << imprimirProceso(aux);
+            if (i == 10)
+            {
+                cout << endl;
+                i = 0;
+            }
+
             aux = aux->liga;
         }
     }
 }
 
-void Lista::juntarMemoria()
+void Lista::juntarMemoria(int consoleWidth)
 {
     // Funcion que recorre la lista de procesos y junta los huecos que se encuentren
     Proceso *aux = inicio;
-    Proceso *q=NULL;
+    Proceso *q = NULL;
 
     int tamAux;
     int tamAuxDer;
 
     while (aux->der != NULL)
-    {   
+    {
 
-        if (aux->status!=HUECO){
-            tamAux=aux->mem_asignada;
+        if (aux->status != HUECO)
+        {
+            tamAux = aux->mem_asignada;
         }
-        else{
-            tamAux=aux->tamanio;
-        }
-
-        if(aux->der->status!=HUECO){
-            tamAuxDer=aux->der->mem_asignada;
-        }
-        else{
-            tamAuxDer=aux->der->tamanio;
+        else
+        {
+            tamAux = aux->tamanio;
         }
 
-        if(tamAuxDer < tamAux){
+        if (aux->der->status != HUECO)
+        {
+            tamAuxDer = aux->der->mem_asignada;
+        }
+        else
+        {
+            tamAuxDer = aux->der->tamanio;
+        }
+
+        if (tamAuxDer < tamAux)
+        {
             aux = aux->der;
         }
         else
@@ -251,43 +278,55 @@ void Lista::juntarMemoria()
             if (aux->status == HUECO && aux->der->status == HUECO && tamAux == tamAuxDer)
             {
                 aux->tamanio += aux->der->tamanio;
-                q=aux->der;
+                q = aux->der;
 
-                if(aux->der->der==NULL){
-                    aux->der=NULL;
-                    fin=aux;
+                if (aux->der->der == NULL)
+                {
+                    aux->der = NULL;
+                    fin = aux;
 
                     return;
                 }
-                else{
+                else
+                {
                     aux->der->der->izq = aux;
                     aux->der = aux->der->der;
                 }
-                
-                delete(q);
+
+                delete (q);
                 if (vel != VELOCIDAD_3)
                 {
-                    cout<<endl<<endl;
-                    cout<<ROJO<<"Uniendo buddys"<<endl;
-                    this->imprimir();  
-                    cout<<endl;
+                    cout << endl
+                         << endl;
+                    cout << ROJO << "Uniendo buddys" << endl;
+                    this->imprimir(consoleWidth);
+                    cout << endl;
                 }
-
             }
 
             else
             {
-                if(aux->der->der==NULL){
+                if (aux->der->der == NULL)
+                {
                     return;
                 }
-                else{
+                else
+                {
                     aux = aux->der->der;
                 }
-                
             }
         }
     }
+}
 
+void gotoxy(int x, int y)
+{
+    HANDLE hcon;
+    hcon = GetStdHandle(STD_OUTPUT_HANDLE);
+    COORD dwPos;
+    dwPos.X = x;
+    dwPos.Y = y;
+    SetConsoleCursorPosition(hcon, dwPos);
 }
 Lista::~Lista()
 {
@@ -297,7 +336,17 @@ Lista::~Lista()
         p = q->der;
         delete q;
         q = p;
-
     }
-    
+}
+
+int contarDigitos(int numero)
+{
+    if (numero == 0)
+    {
+        return 1;
+    }
+
+    int digitos = static_cast<int>(std::log10(std::abs(numero))) + 1;
+
+    return digitos;
 }
